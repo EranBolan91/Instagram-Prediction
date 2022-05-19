@@ -35,3 +35,24 @@ class Functions:
         except:
             print('Error! - post text ')
         return post_text
+
+    def get_img_url(self, wait):
+        img_url = -1
+        try:
+            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/img'))).get_attribute("srcset")
+        except:
+            print('Error! - image url 1')
+
+        try:
+            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
+        except:
+            print('Error! - image url 2')
+        return img_url
+
+    def check_if_video(self, wait):
+        is_video = False
+        try:
+            is_video = wait.until(EC.element_to_be_clickable((By.TAG_NAME, 'video'))).is_displayed()
+        except:
+            print('Error! - is video ')
+        return is_video
