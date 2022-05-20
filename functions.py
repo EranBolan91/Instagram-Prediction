@@ -70,9 +70,43 @@ class Functions:
         following_amount = -1
         followers_amount = -1
         try:
-            user_data = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'g47SY ')))
-            print(user_data[0])
+            user_data = wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".g47SY ")))
+            posts_amount = user_data[0].text
+            followers_amount = user_data[1].text
+            following_amount = user_data[2].text
+            print("Posts: " + posts_amount)
+            print("followers_amount: " + followers_amount)
+            print("following_amount: " + following_amount)
         except:
-            print('Error! - posts amount ')
-        return posts_amount
+            print('Error! - posts following followers amount ')
+        return posts_amount, following_amount, followers_amount
+
+    def clean_number(self, number):
+        # check if the number is thousands example: 1,454 , 2,888 , 9,999
+        thousands = number.find(',')
+        # check if the number is more then ten thousands example: 10k , 20.8k , 90.9k
+        ten_thousands = number.find('k')
+        # check if the number is millions example: 10.1m , 20m , 90.9m
+        millions = number.find('m')
+        if thousands != -1:
+            clean_num = int(number.replace(',', ''))
+            return clean_num
+        elif ten_thousands != -1:
+            if number.find('.') != -1:
+                num_no_dot = number.replace('.', '')
+                clean_num = int(num_no_dot.replace('k', ''))
+                return clean_num * 100
+            else:
+                clean_num = int(number.replace('k', ''))
+                return clean_num * 1000
+        elif millions != -1:
+            if number.find('.') != -1:
+                num_no_dot = number.replace('.', '')
+                clean_num = int(num_no_dot.replace('m', ''))
+                return clean_num * 100000
+            else:
+                clean_num = int(number.replace('m', ''))
+                return clean_num * 100000
+        else:
+            return int(number)
 
