@@ -64,10 +64,18 @@ if __name__ == "__main__":
         # Checking if the post is video
         is_video = Functions().check_if_video(wait)
         print(is_video)
+
         # Get image URL
         img = Functions().get_img_url(wait)
         print(img)
-        #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '/html/body/div[6]/div[2]/div/div'))).click()
+
+        # Open new tab and nav to the username
+        Functions().nav_user_new_tab(driver, username, wait, base_url)
+        #get user data
+        Functions().get_posts_following_followers_amount(wait)
+
+        # Close the tab and nav back
+        Functions().close_new_tab(wait)
+        # Click on the next post (Arrow right)
         wait.until(EC.element_to_be_clickable((By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-        #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'coreSpriteRightPaginationArrow'))).click()
         time.sleep(3)

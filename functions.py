@@ -56,3 +56,23 @@ class Functions:
         except:
             print('Error! - is video ')
         return is_video
+
+    def nav_user_new_tab(self, driver, username, wait, base_url):
+        driver.execute_script("window.open('{}');".format(base_url + '/' + username))
+        driver.switch_to.window(driver.window_handles[1])
+
+    def close_new_tab(self, driver):
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
+
+    def get_posts_following_followers_amount(self, wait):
+        posts_amount = -1
+        following_amount = -1
+        followers_amount = -1
+        try:
+            user_data = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'g47SY ')))
+            print(user_data[0])
+        except:
+            print('Error! - posts amount ')
+        return posts_amount
+
