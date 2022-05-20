@@ -68,6 +68,7 @@ if __name__ == "__main__":
         # Checking if the post is video
         is_video = Functions().check_if_video(wait)
         print(is_video)
+
         # Get image URL
         img = Functions().get_img_url(wait)
         print(img)
