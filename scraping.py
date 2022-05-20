@@ -45,7 +45,7 @@ if __name__ == "__main__":
         (By.NAME, 'username'))).send_keys(USERNAME)
     driver.find_element(by=By.NAME, value='password').send_keys(
         PASSWORD + Keys.RETURN)
-    time.sleep(10)
+    time.sleep(6)
     driver.get(explore_url)
 
     # Click on the first post on the 'Explore' window
@@ -60,6 +60,9 @@ if __name__ == "__main__":
         # Get post likes
         post_likes = Functions().get_post_likes(wait)
         print(post_likes)
+        postLikesNum = Functions().get_number_post_likes(post_likes)
+        print(postLikesNum)
+        print(Functions().clean_number(postLikesNum))
 
         # Get post text
         post_text = Functions().get_post_text(wait)
@@ -68,6 +71,10 @@ if __name__ == "__main__":
         # Checking if the post is video
         is_video = Functions().check_if_video(wait)
         print(is_video)
+
+        # get 1 for Verified badge or 0 for none
+        is_verified = Functions().verified_badge(wait)
+        print(is_verified)
 
         # Get image URL
         img = Functions().get_img_url(wait)
