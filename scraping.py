@@ -1,7 +1,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
@@ -34,7 +34,8 @@ if __name__ == "__main__":
     chrome_options = webdriver.ChromeOptions()
     #driver = webdriver.Chrome(service=Service('C:/Users/123/Desktop/HIT/Data Science Project/chromedriver.exe'), options=options)
     #driver = webdriver.Chrome(service=Service("C:\\Users\\123\\Desktop\\HIT\\Data Science Project\\chromedriver.exe"), options=options)
-    driver = webdriver.Chrome('chromedriver.exe', options=options, chrome_options=chrome_options)
+    driver = webdriver.Chrome(
+        'chromedriver.exe', options=options, chrome_options=chrome_options)
     wait = WebDriverWait(driver, 7)
 
     # Login to Instagram
@@ -45,7 +46,8 @@ if __name__ == "__main__":
     driver.get(explore_url)
 
     # Click on the first post on the 'Explore' window
-    first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'pKKVh')))
+    first_post = wait.until(
+        EC.element_to_be_clickable((By.CLASS_NAME, 'pKKVh')))
     first_post.click()
 
     # Open csv file
@@ -64,6 +66,9 @@ if __name__ == "__main__":
         post_likes = Functions().get_post_likes(wait)
         print(post_likes)
         row.append(post_likes)
+        postLikesNum = Functions().get_number_post_likes(post_likes)
+        print(postLikesNum)
+        print(Functions().clean_number(postLikesNum))
 
         # Get post text
         post_text = Functions().get_post_text(wait)
@@ -74,6 +79,10 @@ if __name__ == "__main__":
         is_video = Functions().check_if_video(wait)
         print(is_video)
         row.append(is_video)
+
+        # get 1 for Verified badge or 0 for none
+        is_verified = Functions().verified_badge(wait)
+        print(is_verified)
 
         # Get image URL
         img = Functions().get_img_url(wait)
