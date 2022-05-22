@@ -22,7 +22,7 @@ USERNAME = os.getenv('USERNAMEWORK')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
-
+    test_url = "https://www.instagram.com/tahuonia/"
     # Defining the webdriver
     options = Options()
     options.page_load_strategy = 'eager'
@@ -40,10 +40,13 @@ if __name__ == "__main__":
 
     # Login to Instagram
     driver.get('{}/accounts/login/'.format(base_url))
-    wait.until(EC.element_to_be_clickable((By.NAME, 'username'))).send_keys(USERNAME)
-    driver.find_element(by=By.NAME, value='password').send_keys(PASSWORD + Keys.RETURN)
+    wait.until(EC.element_to_be_clickable(
+        (By.NAME, 'username'))).send_keys(USERNAME)
+    driver.find_element(by=By.NAME, value='password').send_keys(
+        PASSWORD + Keys.RETURN)
     time.sleep(5)
     driver.get(explore_url)
+    # driver.get(test_url)
 
     # Click on the first post on the 'Explore' window
     first_post = wait.until(
@@ -52,7 +55,8 @@ if __name__ == "__main__":
 
     # Open csv file
     file = open('eran_data.csv', 'w', newline="")
-    header = ['id', 'like', 'following', 'followers', 'post', 'celeb', 'sex', 'pic_vid', 'pCo', 'hashtag', 'content', 'predict']
+    header = ['id', 'like', 'following', 'followers', 'post', 'celeb',
+              'sex', 'pic_vid', 'pCo', 'hashtag', 'content', 'predict']
     writer = csv.writer(file, delimiter='\t')
     writer.writerow(header)
     row = list()
@@ -70,6 +74,10 @@ if __name__ == "__main__":
         print(postLikesNum)
         print(Functions().clean_number(postLikesNum))
 
+        # Get post time
+        timeOfPost = Functions().get_time(wait)
+        print(timeOfPost)
+
         # Get post text
         post_text = Functions().get_post_text(wait)
         print(post_text)
@@ -79,10 +87,6 @@ if __name__ == "__main__":
         is_video = Functions().check_if_video(wait)
         print(is_video)
         row.append(is_video)
-
-        # get 1 for Verified badge or 0 for none
-        is_verified = Functions().verified_badge(wait)
-        print(is_verified)
 
         # Get image URL
         img = Functions().get_img_url(wait)
@@ -97,12 +101,18 @@ if __name__ == "__main__":
         row.append(posts)
         row.append(following)
         row.append(followers)
+
+        # get 1 for Verified badge or 0 for none
+        is_verified = Functions().verified_badge(wait)
+        print(is_verified)
+
         # Close the tab and nav back
         Functions().close_new_tab(driver)
 
         # Write to CSV
-        writer.writerow(row)
-        row.clear()
+        # writer.writerow(row)
+        # row.clear()
         # Click on the next post (Arrow right)
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
         time.sleep(3)
