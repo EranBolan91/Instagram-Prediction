@@ -43,10 +43,13 @@ if __name__ == "__main__":
 
     # Login to Instagram
     driver.get('{}/accounts/login/'.format(base_url))
-    wait.until(EC.element_to_be_clickable((By.NAME, 'username'))).send_keys(USERNAME)
-    driver.find_element(by=By.NAME, value='password').send_keys(PASSWORD + Keys.RETURN)
+    wait.until(EC.element_to_be_clickable(
+        (By.NAME, 'username'))).send_keys(USERNAME)
+    driver.find_element(by=By.NAME, value='password').send_keys(
+        PASSWORD + Keys.RETURN)
     time.sleep(5)
     driver.get(explore_url)
+    # driver.get(test_url)
 
     # Click on the first post on the 'Explore' window
     first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'pKKVh')))
@@ -120,5 +123,3 @@ if __name__ == "__main__":
             time.sleep(3)
 
             post_num += 1
-
-

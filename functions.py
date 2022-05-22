@@ -37,9 +37,7 @@ class Functions:
         except:
             print('Error! - post likes 3')
 
-        if post_likes:
-            return post_likes
-        return '0'
+        return post_likes
 
     def get_post_text(self, wait):
         post_text = -1
@@ -90,7 +88,8 @@ class Functions:
         following_amount = -1
         followers_amount = -1
         try:
-            user_data = wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".g47SY ")))
+            user_data = wait.until(EC.visibility_of_all_elements_located(
+                (By.CSS_SELECTOR, ".g47SY ")))
             posts_amount = user_data[0].text
             followers_amount = user_data[1].text
             following_amount = user_data[2].text
@@ -101,48 +100,65 @@ class Functions:
             print('Error! - posts following followers amount ')
         return posts_amount, following_amount, followers_amount
 
-    def clean_number(self, number):
-        # check if the number is thousands example: 1,454 , 2,888 , 9,999
-        thousands = number.find(',')
-        # check if the number is more then ten thousands example: 10k , 20.8k , 90.9k
-        ten_thousands = number.find('k')
-        # check if the number is millions example: 10.1m , 20m , 90.9m
-        millions = number.find('m')
-        if thousands != -1:
-            clean_num = int(number.replace(',', ''))
-            return clean_num
-        elif ten_thousands != -1:
-            if number.find('.') != -1:
-                num_no_dot = number.replace('.', '')
-                clean_num = int(num_no_dot.replace('k', ''))
-                return clean_num * 100
-            else:
-                clean_num = int(number.replace('k', ''))
-                return clean_num * 1000
-        elif millions != -1:
-            if number.find('.') != -1:
-                num_no_dot = number.replace('.', '')
-                clean_num = int(num_no_dot.replace('m', ''))
-                return clean_num * 100000
-            else:
-                clean_num = int(number.replace('m', ''))
-                return clean_num * 100000
-        else:
-            return int(number)
-
     def verified_badge(self, wait):
-        is_verified = False
+        is_verified = 0
         try:
-            is_verified = wait.until(EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'mTLOB Szr5J coreSpriteVerifiedBadge '))).is_displayed()
+            is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                                 '/html/body/div/section/main/div/header/section/div/div/span'))).text
         except:
             print('Error! - No badge ')
         return is_verified
 
     def get_number_post_likes(self, post_likes):
-        numOfLikes = None
-        if post_likes:
-            numOfLikes = post_likes.split(' ')
-        if type(numOfLikes[0]) == str:
-            return numOfLikes[0]
-        return numOfLikes
+        # numOfLikes = None
+        # if post_likes:
+        #     numOfLikes = post_likes.split(' ')
+        # if type(numOfLikes[0]) == str:
+        #     return numOfLikes[0]
+        # return numOfLikes
+        # numOfLikes = re.findall('\d+,\d+', post_likes)
+        numOfLikes = re.split(r'\s', post_likes)
+        numOfLikes = re.sub(r",", "", numOfLikes[0])
+        if numOfLikes.isnumeric():
+            return numOfLikes
+        return None
+
+    def clean_number(self, number):
+        try:
+            # check if the number is thousands example: 1,454 , 2,888 , 9,999
+            thousands = number.find(',')
+            # check if the number is more then ten thousands example: 10k , 20.8k , 90.9k
+            ten_thousands = number.find('k')
+            # check if the number is millions example: 10.1m , 20m , 90.9m
+            millions = number.find('m')
+            if thousands != -1:
+                clean_num = int(number.replace(',', ''))
+                return clean_num
+            elif ten_thousands != -1:
+                if number.find('.') != -1:
+                    num_no_dot = number.replace('.', '')
+                    clean_num = int(num_no_dot.replace('k', ''))
+                    return clean_num * 100
+                else:
+                    clean_num = int(number.replace('k', ''))
+                    return clean_num * 1000
+            elif millions != -1:
+                if number.find('.') != -1:
+                    num_no_dot = number.replace('.', '')
+                    clean_num = int(num_no_dot.replace('m', ''))
+                    return clean_num * 100000
+                else:
+                    clean_num = int(number.replace('m', ''))
+                    return clean_num * 100000
+            else:
+                return int(number)
+        except:
+            return None
+
+    def get_time(self, wait):
+        post_time = None
+        try:
+            post_time = wait.until(EC.element_to_be_clickable((By.TAG_NAME, 'time'))).text
+        except:
+            print('Error! - No time')
+        return post_time
