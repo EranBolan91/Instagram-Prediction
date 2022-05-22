@@ -1,9 +1,9 @@
+from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
+from msrest.authentication import CognitiveServicesCredentials
 from selenium.webdriver.support.ui import WebDriverWait
-# from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from functions import Functions
@@ -17,11 +17,14 @@ load_dotenv()
 os.getenv('USERNAME')
 PASSWORD = os.getenv('PASSWORD')
 USERNAME = os.getenv('USERNAMEWORK')
+API_KEY = os.getenv('COMPUTER_VISION_KEY')
+ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 
 
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
+    cv_client = ComputerVisionClient(ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -46,63 +49,76 @@ if __name__ == "__main__":
     driver.get(explore_url)
 
     # Click on the first post on the 'Explore' window
-    first_post = wait.until(
-        EC.element_to_be_clickable((By.CLASS_NAME, 'pKKVh')))
+    first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'pKKVh')))
     first_post.click()
 
     # Open csv file
-    file = open('eran_data.csv', 'w', newline="")
-    header = ['id', 'like', 'following', 'followers', 'post', 'celeb', 'sex', 'pic_vid', 'pCo', 'hashtag', 'content', 'predict']
-    writer = csv.writer(file, delimiter='\t')
-    writer.writerow(header)
-    row = list()
-    while 1:
-        # Get the username
-        username = Functions().get_username(wait)
-        print(username)
-        row.append(username)
+    # file = open('eran_data.csv', 'a+', newline="")
+    # header = ['id', 'like', 'following', 'followers', 'post', 'celeb', 'sex', 'pic_vid', 'pCo', 'hashtag', 'content', 'predict']
+    # writer = csv.writer(file, delimiter='\t')
+    # writer.writerow(header)
+    post_num = 1
+    # Open csv file
+    with open('eran_data.csv', 'a+', newline='', encoding='utf-8') as file:
+        csv_writer = csv.writer(file, delimiter='\t', lineterminator='\n')
+        row = []
+        while 1:
+            print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
+            # Get the username
+            username = Functions().get_username(wait)
+            print(username)
+            row.append(username)
 
-        # Get post likes
-        post_likes = Functions().get_post_likes(wait)
-        print(post_likes)
-        row.append(post_likes)
-        postLikesNum = Functions().get_number_post_likes(post_likes)
-        print(postLikesNum)
-        print(Functions().clean_number(postLikesNum))
+            # Get post likes
+            post_likes = Functions().get_post_likes(wait)
+            print(post_likes)
+            row.append(post_likes)
+            postLikesNum = Functions().get_number_post_likes(post_likes)
+            print(postLikesNum)
+            print(Functions().clean_number(postLikesNum))
 
-        # Get post text
-        post_text = Functions().get_post_text(wait)
-        print(post_text)
-        row.append(post_text)
+            # Get post text
+            post_text = Functions().get_post_text(wait)
+            print(post_text)
+            row.append(post_text)
 
-        # Checking if the post is video
-        is_video = Functions().check_if_video(wait)
-        print(is_video)
-        row.append(is_video)
+            # Checking if the post is video
+            is_video = Functions().check_if_video(wait)
+            print(is_video)
+            row.append(is_video)
 
-        # get 1 for Verified badge or 0 for none
-        is_verified = Functions().verified_badge(wait)
-        print(is_verified)
+            # Get image URL
+            img = Functions().get_img_url(wait)
+            print(img)
+            #res = cv_client.describe_image(img, 3)
+            #print(res)
+            row.append(img)
 
-        # Get image URL
-        img = Functions().get_img_url(wait)
-        print(img)
-        row.append(img)
+            # Open new tab and nav to the username
+            Functions().nav_user_new_tab(driver, username, wait, base_url)
 
-        # Open new tab and nav to the username
-        Functions().nav_user_new_tab(driver, username, wait, base_url)
+            # Get user data
+            posts, following, followers = Functions().get_posts_following_followers_amount(wait)
+            row.append(Functions().clean_number(posts))
+            row.append(Functions().clean_number(following))
+            row.append(Functions().clean_number(followers))
 
-        # Get user data
-        posts, following, followers = Functions().get_posts_following_followers_amount(wait)
-        row.append(posts)
-        row.append(following)
-        row.append(followers)
-        # Close the tab and nav back
-        Functions().close_new_tab(driver)
+            # get 1 for Verified badge or 0 for none
+            is_verified = Functions().verified_badge(wait)
+            print(is_verified)
 
-        # Write to CSV
-        writer.writerow(row)
-        row.clear()
-        # Click on the next post (Arrow right)
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-        time.sleep(3)
+            # Close the tab and nav back
+            Functions().close_new_tab(driver)
+
+            # Write to CSV
+            print(row)
+            csv_writer.writerow(row)
+            row.clear()
+
+            # Click on the next post (Arrow right)
+            wait.until(EC.element_to_be_clickable((By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+            time.sleep(3)
+
+            post_num += 1
+
+

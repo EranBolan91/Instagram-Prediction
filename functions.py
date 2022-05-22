@@ -1,4 +1,3 @@
-from curses.ascii import isdigit
 from posixpath import split
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -17,7 +16,8 @@ class Functions:
         return username
 
     def get_post_likes(self, wait):
-        post_likes = 0
+        post_likes = -1
+        # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div'))).text
@@ -29,6 +29,14 @@ class Functions:
                 (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div[2]/div/a/div/span'))).text
         except:
             print('Error! - post likes 2')
+
+        # Looking for 'likes' with the format of "others", for example "767 others" or anything with the word "others"
+        try:
+            post_likes = wait.until(EC.element_to_be_clickable(
+                (By.CLASS_NAME, '_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll '))).text
+        except:
+            print('Error! - post likes 3')
+
         if post_likes:
             return post_likes
         return '0'
@@ -46,13 +54,15 @@ class Functions:
         img_url = -1
         try:
             img_url = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/img'))).get_attribute("srcset")
+                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div/div[1]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
         except:
             print('Error! - image url 1')
 
         try:
             img_url = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
         except:
             print('Error! - image url 2')
         return img_url
@@ -130,38 +140,9 @@ class Functions:
         return is_verified
 
     def get_number_post_likes(self, post_likes):
-        # numOfLikes = re.findall('\d+,\d+', post_likes)
+        numOfLikes = None
         if post_likes:
             numOfLikes = post_likes.split(' ')
         if type(numOfLikes[0]) == str:
             return numOfLikes[0]
-        return None
-
-    def clean_number(self, number):
-        # check if the number is thousands example: 1,454 , 2,888 , 9,999
-        thousands = number.find(',')
-        # check if the number is more then ten thousands example: 10k , 20.8k , 90.9k
-        ten_thousands = number.find('k')
-        # check if the number is millions example: 10.1m , 20m , 90.9m
-        millions = number.find('m')
-        if thousands != -1:
-            clean_num = int(number.replace(',', ''))
-            return clean_num
-        elif ten_thousands != -1:
-            if number.find('.') != -1:
-                num_no_dot = number.replace('.', '')
-                clean_num = int(num_no_dot.replace('k', ''))
-                return clean_num * 100
-            else:
-                clean_num = int(number.replace('k', ''))
-                return clean_num * 1000
-        elif millions != -1:
-            if number.find('.') != -1:
-                num_no_dot = number.replace('.', '')
-                clean_num = int(num_no_dot.replace('m', ''))
-                return clean_num * 100000
-            else:
-                clean_num = int(number.replace('m', ''))
-                return clean_num * 100000
-        else:
-            return int(number)
+        return numOfLikes
