@@ -65,50 +65,59 @@ if __name__ == "__main__":
     with open('eran_data.csv', 'a+', newline='', encoding='utf-8') as file:
         csv_writer = csv.writer(file, delimiter='\t', lineterminator='\n')
         row = []
+        data_dict = {}
         while 1:
             print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
             # Get the username
             username = Functions().get_username(wait)
-            print(username)
+            print("Username: " + username)
             row.append(username)
 
             # Get post likes
             post_likes = Functions().get_post_likes(wait)
-            print(post_likes)
-            row.append(post_likes)
-            postLikesNum = Functions().get_number_post_likes(post_likes)
-            print(postLikesNum)
-            print(Functions().clean_number(postLikesNum))
+            # Why we need 'get_number_post_likes' ?
+            #postLikesNum = Functions().get_number_post_likes(post_likes)
+            clean_post_likes = Functions().clean_number(post_likes)
+            print("Post Likes: " + str(clean_post_likes))
+            row.append(clean_post_likes)
 
             # Get post text
             post_text = Functions().get_post_text(wait)
-            print(post_text)
+            print("Post Text: " + str(post_text))
             row.append(post_text)
 
             # Checking if the post is video
             is_video = Functions().check_if_video(wait)
-            print(is_video)
+            print("Is Video: " + str(is_video))
             row.append(is_video)
 
             # Get image URL
             img = Functions().get_img_url(wait)
-            print(img)
+            print("Image URL: " + str(img))
             #res = cv_client.describe_image(img, 3)
             #print(res)
             row.append(img)
+
+            # Get post date
+            post_date = Functions().get_time(wait)
+            print("Post Date: " + str(post_date))
+            row.append(post_date)
 
             # Open new tab and nav to the username
             Functions().nav_user_new_tab(driver, username, wait, base_url)
 
             # Get user data
             posts, following, followers = Functions().get_posts_following_followers_amount(wait)
+            print("Posts: " + str(Functions().clean_number(posts)))
+            print("followers_amount: " + str(Functions().clean_number(followers)))
+            print("following_amount: " + str(Functions().clean_number(following)))
             row.append(Functions().clean_number(posts))
             row.append(Functions().clean_number(following))
             row.append(Functions().clean_number(followers))
 
-            # get 1 for Verified badge or 0 for none
+            # get True for Verified badge or 0 for none
             is_verified = Functions().verified_badge(wait)
-            print(is_verified)
+            print("Is Verified: " + str(is_verified))
 
             # Close the tab and nav back
             Functions().close_new_tab(driver)
