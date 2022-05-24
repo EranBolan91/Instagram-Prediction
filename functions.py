@@ -91,18 +91,33 @@ class Functions:
         return posts_amount, following_amount, followers_amount
 
     def verified_badge(self, wait):
+        # initialization
         is_verified = 0
         try:
+            # getting the verified badge
             is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
                                                                  '/html/body/div/section/main/div/header/section/div/div/span'))).text
         except:
             print('Error! - No badge ')
         return is_verified
 
+    def post_hashtags(self, post_text):
+        # initial list variable
+        hashtags_list = []
+        # splitting the text into words
+        for word in post_text.split():
+            # checking the first character of every word
+            if word[0] == '#':
+                # adding the word to the list
+                hashtags_list.append(word[1:])
+        return hashtags_list
+
     def get_number_post_likes(self, post_likes):
-        # numOfLikes = re.findall('\d+,\d+', post_likes)
+        # splitting the number from the word "likes"
         numOfLikes = re.split(r'\s', post_likes)
+        # removing "," from the number with empty character
         numOfLikes = re.sub(r",", "", numOfLikes[0])
+        # checking that we got number and not string incase of single like
         if numOfLikes.isnumeric():
             return numOfLikes
         return None
@@ -137,11 +152,15 @@ class Functions:
             else:
                 return int(number)
         except:
+            # if we got 0 like so nothing to clean and return none
             return None
 
+    # getting post date publishment
     def get_time(self, wait):
+        # initialize
         post_time = 0
         try:
+            # searching for "time" tag
             post_time = wait.until(EC.element_to_be_clickable(
                 (By.TAG_NAME, 'time'))).text
         except:

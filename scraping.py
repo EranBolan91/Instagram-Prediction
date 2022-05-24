@@ -69,10 +69,10 @@ if __name__ == "__main__":
         # Get post likes
         post_likes = Functions().get_post_likes(wait)
         print(post_likes)
-        row.append(post_likes)
         postLikesNum = Functions().get_number_post_likes(post_likes)
         print(postLikesNum)
         print(Functions().clean_number(postLikesNum))
+        row.append(postLikesNum)
 
         # Get post time
         timeOfPost = Functions().get_time(wait)
@@ -82,6 +82,12 @@ if __name__ == "__main__":
         post_text = Functions().get_post_text(wait)
         print(post_text)
         row.append(post_text)
+
+        # get post hashtags
+        hashtags = Functions().post_hashtags(post_text)
+        print("\nThe hashtags in \"" + post_text + "\" are :")
+        for hashtag in hashtags:
+            print(hashtag)
 
         # Checking if the post is video
         is_video = Functions().check_if_video(wait)
