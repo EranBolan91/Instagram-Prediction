@@ -77,9 +77,9 @@ if __name__ == "__main__":
 
             # Get post likes
             post_likes = Functions().get_post_likes(wait)
-            # Why we need 'get_number_post_likes' ?
-            #postLikesNum = Functions().get_number_post_likes(post_likes)
-            clean_post_likes = Functions().clean_number(post_likes)
+            # This func remove 'likes' String
+            postLikesNum = Functions().get_number_post_likes(post_likes)
+            clean_post_likes = Functions().clean_number(postLikesNum)
             print("Post Likes: " + str(clean_post_likes))
             row.append(clean_post_likes)
 
@@ -99,10 +99,6 @@ if __name__ == "__main__":
             for hashtag in hashtags:
                 print(hashtag)
 
-            # Checking if the post is video
-            is_video = Functions().check_if_video(wait)
-            print(is_video)
-            row.append(is_video)
             # Get image URL
             img = Functions().get_img_url(wait)
             print("Image URL: " + str(img))

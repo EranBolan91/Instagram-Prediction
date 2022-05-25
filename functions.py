@@ -21,6 +21,7 @@ class Functions:
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div'))).text
+            print("in func post likes: " + str(post_likes))
             # /html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div
         except:
             print('Error! - post likes 1')
@@ -37,6 +38,11 @@ class Functions:
                 (By.CLASS_NAME, '_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll ')))[0].text
         except:
             print('Error! - post likes 3')
+
+        try:
+            post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll "')))
+        except:
+            print('Error! - post likes 4')
 
         return post_likes
 
@@ -65,14 +71,19 @@ class Functions:
         # except:
         #     print('Error! - image url 2')
         try:
-            image_post_parent = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '//div[@class="eLAPa RzuR0"')))
-            url = image_post_parent.children[0].children[0].get_attribute(
-                "srcset")
+            image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="eLAPa RzuR0"')))
+            url = image_post_parent.children[0].children[0].get_attribute("srcset")
             img_url = url.split(" ")[0]
         except:
             print('Error! - image url 3')
 
+        try:
+            #image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+            #url = image_post_parent.children[0].children[0].get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
+        except:
+            print('Error! - image url 4')
         return img_url
 
     def check_if_video(self, wait):
@@ -134,26 +145,29 @@ class Functions:
         return hashtags_list
 
     def get_number_post_likes(self, post_likes):
-        # splitting the number from the word "likes"
-        numOfLikes = re.split(r'\s', post_likes)
-        # removing "," from the number with empty character
-        numOfLikes = re.sub(r",", "", numOfLikes[0])
-        # checking that we got number and not string incase of single like
-        if numOfLikes.isnumeric():
-            return numOfLikes
+        if post_likes:
+            # splitting the number from the word "likes"
+            numOfLikes = re.split(r'\s', post_likes)
+            # removing "," from the number with empty character
+            numOfLikes = re.sub(r",", "", numOfLikes[0])
+            # checking that we got number and not string incase of single like
+            if numOfLikes.isnumeric():
+                return numOfLikes
         return None
 
     # Get number as a String, if the number is between 0 - 999, this func should return the number it self
     # IF the number is with K or M. Then this func calc the right number
     # IT also knows how to handle with this kind of numbers "1,445 , 22,455 , 111,059"
     def clean_number(self, number):
-        try:
+        # Checking if number is not None
+        if number:
+            number = number.lower()
             # check if the number is thousands example: 1,454 , 2,888 , 9,999
             thousands = number.find(',')
             # check if the number is more then ten thousands example: 10k , 20.8k , 90.9k
-            ten_thousands = number.find('k', 'K')
+            ten_thousands = number.find('k')
             # check if the number is millions example: 10.1m , 20m , 90.9m
-            millions = number.find('m', 'M')
+            millions = number.find('m')
             if thousands != -1:
                 clean_num = int(number.replace(',', ''))
                 return clean_num
@@ -175,8 +189,8 @@ class Functions:
                     return clean_num * 100000
             else:
                 return int(number)
-        except:
             # if we got 0 like so nothing to clean and return none
+        else:
             return None
 
     # getting post date publishment
@@ -185,8 +199,7 @@ class Functions:
         post_time = 0
         try:
             # searching for "time" tag
-            post_time = wait.until(EC.element_to_be_clickable(
-                (By.TAG_NAME, 'time'))).text
+            post_time = wait.until(EC.element_to_be_clickable((By.TAG_NAME, 'time'))).text
         except:
             print('Error! - No time')
         return post_time
