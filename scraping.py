@@ -1,7 +1,7 @@
-# from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
-# from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from selenium.webdriver.support import expected_conditions as EC
-# from msrest.authentication import CognitiveServicesCredentials
+from msrest.authentication import CognitiveServicesCredentials
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -95,9 +95,12 @@ if __name__ == "__main__":
 
             # get post hashtags
             hashtags = Functions().post_hashtags(post_text)
-            print("\nThe hashtags in \"" + post_text + "\" are :")
-            for hashtag in hashtags:
-                print(hashtag)
+            if hashtags:
+                print("\nThe hashtags in \"" + str(post_text) + "\" are :")
+                for hashtag in hashtags:
+                    print(hashtag)
+            else:
+                print("No hashtags in this post.")
 
             # Get image URL
             img = Functions().get_img_url(wait)
