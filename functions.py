@@ -1,4 +1,3 @@
-from posixpath import split
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import re
@@ -93,16 +92,21 @@ class Functions:
         except:
             print('Error! - image url 3')
 
+        # try:
+        #     img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/div[1]/img')))
+        #     #img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+        #     print(img_url)#/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]
+        #     #image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+        #     img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+        #     #url = image_post_parent.children[0].children[0].get_attribute("srcset")
+        #     img_url = img_url.split(" ")[0]
+        # except:
+        #     print('Error! - image url 4')
+
         try:
-            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/div[1]/img')))
-            #img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
-            print(img_url)#/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]
-            #image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
-            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
-            #url = image_post_parent.children[0].children[0].get_attribute("srcset")
-            img_url = img_url.split(" ")[0]
+            img_url = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'FFVAD'))).get_attribute("srcset")
         except:
-            print('Error! - image url 4')
+            print('Error! - image url 5')
         return img_url
 
     # checking if the post is a picture or video
@@ -116,9 +120,15 @@ class Functions:
         return is_video
 
     # going to the user profile tab to get more information
-    def nav_user_new_tab(self, driver, username, wait, base_url):
+    def nav_user_new_tab(self, driver, username, base_url):
         driver.execute_script(
             "window.open('{}');".format(base_url + '/' + username))
+        driver.switch_to.window(driver.window_handles[1])
+
+    # open new tab of the post
+    def nav_post_new_tab(self, driver, post_id, base_url):
+        driver.execute_script(
+            "window.open('{}');".format(base_url + '/p/' + post_id))
         driver.switch_to.window(driver.window_handles[1])
 
     # closing the tab opened to returning to continue the code
@@ -241,3 +251,9 @@ class Functions:
             return len(re.findall(pattern, post_text))
         else:
             return 0
+
+    def get_post_id(self, driver):
+        url = driver.current_url
+        post_id = url.split('/')[-2]
+        return post_id
+

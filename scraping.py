@@ -73,7 +73,10 @@ if __name__ == "__main__":
             # Get the username
             username = Functions().get_username(wait)
             print("Username: " + username)
-            row.append(username)
+
+            # Get post id
+            post_id = Functions().get_post_id(driver)
+            print("Post id: " + str(post_id))
 
             # Get post likes
             # post_likes = Functions().get_post_likes(wait)
@@ -99,6 +102,9 @@ if __name__ == "__main__":
             # for hashtag in hashtags:
             #     print(hashtag)
 
+            # Open new tab to current post
+            Functions().nav_post_new_tab(driver, post_id, base_url)
+
             # Get image URL
             img = Functions().get_img_url(wait)
             print("Image URL: " + str(img))
@@ -106,13 +112,15 @@ if __name__ == "__main__":
             # print(res)
             row.append(img)
 
+            Functions().close_new_tab(driver)
+
             # Get post date
-            post_date = Functions().get_time(wait)
-            print("Post Date: " + str(post_date))
-            row.append(post_date)
+            # post_date = Functions().get_time(wait)
+            # print("Post Date: " + str(post_date))
+            # row.append(post_date)
             #
             # # Open new tab and nav to the username
-            # Functions().nav_user_new_tab(driver, username, wait, base_url)
+            # Functions().nav_user_new_tab(driver, username, base_url)
             #
             # # Get user data
             # posts, following, followers = Functions().get_posts_following_followers_amount(wait)
