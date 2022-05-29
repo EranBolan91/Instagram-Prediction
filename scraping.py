@@ -76,28 +76,28 @@ if __name__ == "__main__":
             row.append(username)
 
             # Get post likes
-            post_likes = Functions().get_post_likes(wait)
-            # This func remove 'likes' String
-            postLikesNum = Functions().get_number_post_likes(post_likes)
-            clean_post_likes = Functions().clean_number(postLikesNum)
-            print("Post Likes: " + str(clean_post_likes))
-            row.append(clean_post_likes)
-
-            # Get post text
-            post_text = Functions().get_post_text(wait)
-            print("Post Text: " + str(post_text))
-            row.append(post_text)
-
-            # Checking if the post is video
-            is_video = Functions().check_if_video(wait)
-            print("Is Video: " + str(is_video))
-            row.append(is_video)
-
-            # get post hashtags
-            hashtags = Functions().post_hashtags(post_text)
-            print("\nThe hashtags in \"" + post_text + "\" are :")
-            for hashtag in hashtags:
-                print(hashtag)
+            # post_likes = Functions().get_post_likes(wait)
+            # # This func remove 'likes' String
+            # postLikesNum = Functions().get_number_post_likes(post_likes)
+            # clean_post_likes = Functions().clean_number(postLikesNum)
+            # print("Post Likes: " + str(clean_post_likes))
+            # row.append(clean_post_likes)
+            #
+            # # Get post text
+            # post_text = Functions().get_post_text(wait)
+            # print("Post Text: " + str(post_text))
+            # row.append(post_text)
+            #
+            # # Checking if the post is video
+            # is_video = Functions().check_if_video(wait)
+            # print("Is Video: " + str(is_video))
+            # row.append(is_video)
+            #
+            # # get post hashtags
+            # hashtags = Functions().post_hashtags(post_text)
+            # print("\nThe hashtags in \"" + post_text + "\" are :")
+            # for hashtag in hashtags:
+            #     print(hashtag)
 
             # Get image URL
             img = Functions().get_img_url(wait)
@@ -110,25 +110,31 @@ if __name__ == "__main__":
             post_date = Functions().get_time(wait)
             print("Post Date: " + str(post_date))
             row.append(post_date)
-            # Open new tab and nav to the username
-            Functions().nav_user_new_tab(driver, username, wait, base_url)
-            # Get user data
-            posts, following, followers = Functions().get_posts_following_followers_amount(wait)
-            print("Posts: " + str(Functions().clean_number(posts)))
-            print("followers_amount: " + str(Functions().clean_number(followers)))
-            print("following_amount: " + str(Functions().clean_number(following)))
-            row.append(Functions().clean_number(posts))
-            row.append(Functions().clean_number(following))
-            row.append(Functions().clean_number(followers))
-            # get True for Verified badge or 0 for none
-            is_verified = Functions().verified_badge(wait)
-            print("Is Verified: " + str(is_verified))
-            # Close the tab and nav back
-            Functions().close_new_tab(driver)
-            # Write to CSV
-            print(row)
-            csv_writer.writerow(row)
-            row.clear()
+            #
+            # # Open new tab and nav to the username
+            # Functions().nav_user_new_tab(driver, username, wait, base_url)
+            #
+            # # Get user data
+            # posts, following, followers = Functions().get_posts_following_followers_amount(wait)
+            # print("Posts: " + str(Functions().clean_number(posts)))
+            # print("followers_amount: " + str(Functions().clean_number(followers)))
+            # print("following_amount: " + str(Functions().clean_number(following)))
+            # row.append(Functions().clean_number(posts))
+            # row.append(Functions().clean_number(following))
+            # row.append(Functions().clean_number(followers))
+            #
+            # # get True for Verified badge or 0 for none
+            # is_verified = Functions().verified_badge(wait)
+            # print("Is Verified: " + str(is_verified))
+            #
+            # # Close the tab and nav back
+            # Functions().close_new_tab(driver)
+            #
+            # # Write to CSV
+            # print(row)
+            # csv_writer.writerow(row)
+            # row.clear()
+
             # Click on the next post (Arrow right)
             wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()

@@ -57,19 +57,34 @@ class Functions:
 
     def get_img_url(self, wait):
         img_url = None
-        # try:
-        #     img_url = wait.until(EC.element_to_be_clickable(
-        #         (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div/div[1]/img'))).get_attribute("srcset")
-        #     img_url = img_url.split(" ")[0]
-        # except:
-        #     print('Error! - image url 1')
-        #
-        # try:
-        #     img_url = wait.until(EC.element_to_be_clickable(
-        #         (By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
-        #     img_url = img_url.split(" ")[0]
-        # except:
-        #     print('Error! - image url 2')
+        try:
+            img_url = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div/div[1]/div[1]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
+        except:
+            print('Error! - image url 1')
+
+        try:
+            img_url = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/div[1]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
+        except:
+            print('Error! - image url 1.1')
+
+        try:
+            img_url = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
+        except:
+            print('Error! - image url 2')
+
+        try:
+            img_url = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
+            img_url = img_url.split(" ")[0]
+        except:
+            print('Error! - image url 2')
+
         try:
             image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="eLAPa RzuR0"')))
             url = image_post_parent.children[0].children[0].get_attribute("srcset")
@@ -78,8 +93,11 @@ class Functions:
             print('Error! - image url 3')
 
         try:
-            #image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
-            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/div[1]/img')))
+            #img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+                                                                       #
+                                                                       #
+            print(img_url)                                    #/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]
             #url = image_post_parent.children[0].children[0].get_attribute("srcset")
             img_url = img_url.split(" ")[0]
         except:
