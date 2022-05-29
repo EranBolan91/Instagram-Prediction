@@ -6,6 +6,7 @@ import re
 
 class Functions:
 
+    # getting the username of the post
     def get_username(self, wait):
         username = None
         try:
@@ -15,6 +16,7 @@ class Functions:
             print('Error - username!')
         return username
 
+    # getting the post likes
     def get_post_likes(self, wait):
         post_likes = None
         # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
@@ -40,12 +42,14 @@ class Functions:
             print('Error! - post likes 3')
 
         try:
-            post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll "')))
+            post_likes = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll "')))
         except:
             print('Error! - post likes 4')
 
         return post_likes
 
+    # getting the content of the post
     def get_post_text(self, wait):
         post_text = None
         try:
@@ -55,6 +59,8 @@ class Functions:
             print('Error! - post text ')
         return post_text
 
+    # Needs to be the first get funtion
+    # getting the img url (later will be used for ID)
     def get_img_url(self, wait):
         img_url = None
         try:
@@ -79,15 +85,10 @@ class Functions:
             print('Error! - image url 2')
 
         try:
-            img_url = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '//div[@class="KL4Bh"]/img'))).get_attribute("srcset")
-            img_url = img_url.split(" ")[0]
-        except:
-            print('Error! - image url 2')
-
-        try:
-            image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="eLAPa RzuR0"')))
-            url = image_post_parent.children[0].children[0].get_attribute("srcset")
+            image_post_parent = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="eLAPa RzuR0"')))
+            url = image_post_parent.children[0].children[0].get_attribute(
+                "srcset")
             img_url = url.split(" ")[0]
         except:
             print('Error! - image url 3')
@@ -95,15 +96,16 @@ class Functions:
         try:
             img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]/div[1]/img')))
             #img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
-                                                                       #
-                                                                       #
-            print(img_url)                                    #/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]
+            print(img_url)#/html/body/div[6]/div[3]/div/article/div/div[1]/div/div[1]/div[2]/div/div/div/ul/li[2]/div/div/div/div[1]
+            #image_post_parent = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
+            img_url = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[1]/div/div')))
             #url = image_post_parent.children[0].children[0].get_attribute("srcset")
             img_url = img_url.split(" ")[0]
         except:
             print('Error! - image url 4')
         return img_url
 
+    # checking if the post is a picture or video
     def check_if_video(self, wait):
         is_video = False
         try:
@@ -113,15 +115,18 @@ class Functions:
             print('Error! - is video ')
         return is_video
 
+    # going to the user profile tab to get more information
     def nav_user_new_tab(self, driver, username, wait, base_url):
         driver.execute_script(
             "window.open('{}');".format(base_url + '/' + username))
         driver.switch_to.window(driver.window_handles[1])
 
+    # closing the tab opened to returning to continue the code
     def close_new_tab(self, driver):
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
 
+    # getting user data : posts, following and followers
     def get_posts_following_followers_amount(self, wait):
         posts_amount = None
         following_amount = None
@@ -151,17 +156,22 @@ class Functions:
             print('Error! - No badge ')
         return is_verified
 
+    # getting only the hashtags from the post text (content)
     def post_hashtags(self, post_text):
         # initial list variable
         hashtags_list = []
-        # splitting the text into words
-        for word in post_text.split():
-            # checking the first character of every word
-            if word[0] == '#':
-                # adding the word to the list
-                hashtags_list.append(word[1:])
-        return hashtags_list
+        if post_text:
+            # splitting the text into words
+            for word in post_text.split():
+                # checking the first character of every word
+                if word[0] == '#':
+                    # adding the word to the list
+                    hashtags_list.append(word[1:])
+            return hashtags_list
+        else:
+            return None
 
+    # seperating the number from the string
     def get_number_post_likes(self, post_likes):
         if post_likes:
             # splitting the number from the word "likes"
@@ -217,7 +227,8 @@ class Functions:
         post_time = 0
         try:
             # searching for "time" tag
-            post_time = wait.until(EC.element_to_be_clickable((By.TAG_NAME, 'time'))).text
+            post_time = wait.until(
+                EC.element_to_be_clickable((By.TAG_NAME, 'time'))).text
         except:
             print('Error! - No time')
         return post_time

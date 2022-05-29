@@ -1,7 +1,7 @@
-# from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
-# from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from selenium.webdriver.support import expected_conditions as EC
-# from msrest.authentication import CognitiveServicesCredentials
+from msrest.authentication import CognitiveServicesCredentials
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
