@@ -62,8 +62,7 @@ class Functions:
     def get_img_url(self, wait):
         img_url = None
         try:
-            img_url = wait.until(EC.visibility_of_element_located(
-                (By.TAG_NAME, "img"))).get_attribute("src")
+            img_url = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "img"))).get_attribute("src")
         except:
             print('Error! - No Image')
         return img_url
@@ -216,3 +215,31 @@ class Functions:
         url = driver.current_url
         post_id = url.split('/')[-2]
         return post_id
+
+    # This func calc if the post has more then 30% likes....
+    # Returns 1 if the post has more then 30% likes , and 0 if not
+    def calc_prediction(self, likes_amount, followers_amount):
+        if likes_amount and followers_amount:
+            calc = likes_amount / followers_amount
+            if calc > 0.3:
+                return 1
+            else:
+                return 0
+        else:
+            # Return 'None' only when the 'likes_amount' or 'followers_amount' are None
+            return None
+
+    def get_tags_from_image(self, cv_client, image):
+        tags_string = ""
+        if image:
+            res = cv_client.tag_image(image)
+            if len(res.tags) == 0:
+                return None
+            else:
+                for tag in res.tags:
+                    #print("'{}' with confidence {:.2f}%".format(tag.name, tag.confidence * 100))
+                    if tag.confidence * 100 > 90:
+                        tags_string += tag.name + " "
+                return tags_string
+        else:
+            return None

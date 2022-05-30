@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from functions import Functions
 from selenium import webdriver
 from dotenv import load_dotenv
+from datetime import datetime
 import time
 import csv
 import os
@@ -24,8 +25,7 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
-    # cv_client = ComputerVisionClient(
-    # ENDPOINT, CognitiveServicesCredentials(API_KEY))
+    cv_client = ComputerVisionClient(ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -36,8 +36,6 @@ if __name__ == "__main__":
     options.add_argument("--disable-notifications")
 
     chrome_options = webdriver.ChromeOptions()
-    #driver = webdriver.Chrome(service=Service('C:/Users/123/Desktop/HIT/Data Science Project/chromedriver.exe'), options=options)
-    #driver = webdriver.Chrome(service=Service("C:\\Users\\123\\Desktop\\HIT\\Data Science Project\\chromedriver.exe"), options=options)
     driver = webdriver.Chrome(
         'chromedriver.exe', options=options, chrome_options=chrome_options)
     wait = WebDriverWait(driver, 7)
@@ -50,7 +48,6 @@ if __name__ == "__main__":
         PASSWORD + Keys.RETURN)
     time.sleep(5)
     driver.get(explore_url)
-    # driver.get(test_url)
 
     # Click on the first post on the 'Explore' window
     first_post = wait.until(
@@ -59,7 +56,7 @@ if __name__ == "__main__":
 
     # Open csv file
     # file = open('eran_data.csv', 'a+', newline="")
-    # header = ['id', 'like', 'following', 'followers', 'post', 'celeb', 'sex', 'pic_vid', 'pCo', 'hashtag', 'content', 'predict']
+    # header = ['id', 'like', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid', 'hashtag', 'hashtag_amount','pCo', 'content', 'date', 'curr_date','predict']
     # writer = csv.writer(file, delimiter='\t')
     # writer.writerow(header)
     post_num = 1
@@ -68,6 +65,7 @@ if __name__ == "__main__":
         csv_writer = csv.writer(file, delimiter='\t', lineterminator='\n')
         row = []
         data_dict = {}
+        tags_list = []
         while 1:
             print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
             # Get the username
@@ -108,9 +106,8 @@ if __name__ == "__main__":
             # Get image URL
             img = Functions().get_img_url(wait)
             print("Image URL: " + str(img))
-            #res = cv_client.describe_image(img, 3)
-            # print(res)
-            row.append(img)
+            tags_list.append(Functions().get_tags_from_image(cv_client, img))
+            print(tags_list)
 
             Functions().close_new_tab(driver)
 
