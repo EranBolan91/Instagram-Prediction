@@ -25,7 +25,8 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
-    cv_client = ComputerVisionClient(ENDPOINT, CognitiveServicesCredentials(API_KEY))
+    # cv_client = ComputerVisionClient(
+    # ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -101,15 +102,15 @@ if __name__ == "__main__":
             #     print(hashtag)
 
             # Open new tab to current post
-            Functions().nav_post_new_tab(driver, post_id, base_url)
+            # Functions().nav_post_new_tab(driver, post_id, base_url)
 
             # Get image URL
-            img = Functions().get_img_url(wait)
-            print("Image URL: " + str(img))
-            tags_list.append(Functions().get_tags_from_image(cv_client, img))
-            print(tags_list)
+            # img = Functions().get_img_url(wait)
+            # print("Image URL: " + str(img))
+            # tags_list.append(Functions().get_tags_from_image(cv_client, img))
+            # print(tags_list)
 
-            Functions().close_new_tab(driver)
+            # Functions().close_new_tab(driver)
 
             # Get post date
             # post_date = Functions().get_time(wait)
@@ -117,7 +118,7 @@ if __name__ == "__main__":
             # row.append(post_date)
             #
             # # Open new tab and nav to the username
-            # Functions().nav_user_new_tab(driver, username, base_url)
+            Functions().nav_user_new_tab(driver, username, base_url)
             #
             # # Get user data
             # posts, following, followers = Functions().get_posts_following_followers_amount(wait)
@@ -128,12 +129,12 @@ if __name__ == "__main__":
             # row.append(Functions().clean_number(following))
             # row.append(Functions().clean_number(followers))
             #
-            # # get True for Verified badge or 0 for none
-            # is_verified = Functions().verified_badge(wait)
-            # print("Is Verified: " + str(is_verified))
+            # get True for Verified badge or 0 for none
+            is_verified = Functions().verified_badge(wait)
+            print("Is Verified: " + str(is_verified))
             #
             # # Close the tab and nav back
-            # Functions().close_new_tab(driver)
+            Functions().close_new_tab(driver)
             #
             # # Write to CSV
             # print(row)
