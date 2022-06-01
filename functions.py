@@ -22,8 +22,6 @@ class Functions:
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div'))).text
-            print("in func post likes: " + str(post_likes))
-            # /html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div
         except:
             print('Error! - post likes 1')
 
@@ -46,17 +44,55 @@ class Functions:
         except:
             print('Error! - post likes 4')
 
+        # This XPATH is for 'views'
+        try:
+            post_likes = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/span/div')))
+        except:
+            print('Error! - post views 5')
         return post_likes
 
     # getting the content of the post
     def get_post_text(self, wait):
-        post_text = None
+        post_text = ""
         try:
             post_text = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div/li/div/div/div[2]/div[1]/span'))).text
         except:
-            print('Error! - post text ')
+            print('Error! - post text 1')
+
+        try:
+            post_text = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/ul[1]/div/li/div/div/div[2]/div[1]/span'))).text
+        except:
+            print('Error! - post text 2')
         return post_text
+
+    def clean_post_text(self, post_text):
+        if post_text:
+            hashtag_pattern = "#\w+"  # pattern for hashtags
+            label_tiugim = "@\w+" # pattern for labels (Tiyugim)
+
+            # Getting all hashtags from text
+            hashtags_list = re.findall(hashtag_pattern, post_text)
+            for hashtag in hashtags_list:
+                # Removing \n from hashtags
+                post_text = post_text.replace('\n', '')
+
+                post_text = post_text.replace(hashtag, '')
+
+            labels = re.findall(label_tiugim, post_text)
+            for label in labels:
+                # Removing \n from labels
+                post_text = post_text.replace('\n', '')
+                # Replacing label with empty string
+                post_text = post_text.replace(label, '')
+
+            # Removing all special characters from text
+            clean_post_text = re.sub("\W+", ' ', post_text)
+            return clean_post_text
+        else:
+            return ' '
 
     # getting the img url (for computer vision)
     def get_img_url(self, wait):
@@ -68,6 +104,8 @@ class Functions:
         return img_url
 
     # checking if the post is a picture or video
+    # IF its video - it will return True
+    # IF not - it will return False
     def check_if_video(self, wait):
         is_video = False
         try:
@@ -105,9 +143,6 @@ class Functions:
             posts_amount = user_data[0].text
             followers_amount = user_data[1].text
             following_amount = user_data[2].text
-            print("In func Posts: " + str(posts_amount))
-            print("In func followers_amount: " + str(followers_amount))
-            print("In func following_amount: " + str(following_amount))
         except:
             print('Error! - posts following followers amount ')
         return posts_amount, following_amount, followers_amount
@@ -115,7 +150,7 @@ class Functions:
     # Need to ask Oren, how is it return 0 or 1
     def verified_badge(self, wait):
         # initialization
-        is_verified = False
+        is_verified = 0
         try:
             # getting the verified badge
             is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
@@ -125,19 +160,22 @@ class Functions:
         return is_verified
 
     # getting only the hashtags from the post text (content)
+    # If 'post_text' is empty string, then it will return empty string (it happenes when post does not have any hashtags)
     def post_hashtags(self, post_text):
         # initial list variable
         hashtags_list = []
+        hashtags_string = ""
         if post_text:
             # splitting the text into words
             for word in post_text.split():
                 # checking the first character of every word
                 if word[0] == '#':
                     # adding the word to the list
-                    hashtags_list.append(word[1:])
-            return hashtags_list
+                    #hashtags_list.append(word[1:])
+                    hashtags_string += word + " "
+            return hashtags_string
         else:
-            return None
+            return " "
 
     # seperating the number from the string
     def get_number_post_likes(self, post_likes):
@@ -192,7 +230,7 @@ class Functions:
     # getting post date publishment
     def get_time(self, wait):
         # initialize
-        post_time = 0
+        post_time = None
         try:
             # searching for "time" tag
             post_time = wait.until(
@@ -220,7 +258,7 @@ class Functions:
     # Returns 1 if the post has more then 30% likes , and 0 if not
     def calc_prediction(self, likes_amount, followers_amount):
         if likes_amount and followers_amount:
-            calc = likes_amount / followers_amount
+            calc = int(likes_amount) / int(followers_amount)
             if calc > 0.3:
                 return 1
             else:
