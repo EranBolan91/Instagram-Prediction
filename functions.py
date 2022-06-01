@@ -98,7 +98,8 @@ class Functions:
     def get_img_url(self, wait):
         img_url = None
         try:
-            img_url = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "img"))).get_attribute("src")
+            img_url = wait.until(EC.visibility_of_element_located(
+                (By.TAG_NAME, "img"))).get_attribute("src")
         except:
             print('Error! - No Image')
         return img_url
@@ -155,8 +156,10 @@ class Functions:
             # getting the verified badge
             is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
                                                                  '/html/body/div/section/main/div/header/section/div/div/span'))).text
+            if is_verified:
+                is_verified = 1
         except:
-            print('Error! - No badge ')
+            return is_verified
         return is_verified
 
     # getting only the hashtags from the post text (content)

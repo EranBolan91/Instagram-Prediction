@@ -26,7 +26,8 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
-    cv_client = ComputerVisionClient(ENDPOINT, CognitiveServicesCredentials(API_KEY))
+    cv_client = ComputerVisionClient(
+    ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -171,7 +172,7 @@ if __name__ == "__main__":
 
             # # Write to CSV
             # print(row)
-            csv_writer.writerow(post_obj)
+            # csv_writer.writerow(post_obj)
             # row.clear()
 
             # Click on the next post (Arrow right)
