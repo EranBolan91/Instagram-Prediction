@@ -1,7 +1,9 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import pandas as pd
+import csv
 import re
-
+import os
 
 class Functions:
 
@@ -10,46 +12,53 @@ class Functions:
         username = None
         try:
             username = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                              '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div/span/a'))).text
+                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div[1]/span/a'))).text
         except:
-            print('Error - username!')
+            print('Error - username! - 1')
+
+        try:
+            username = wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div/span/a'))).text
+        except:
+            print('Error - username! - 2')
         return username
 
     # getting the post likes
     def get_post_likes(self, wait):
         post_likes = None
-        # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
+
         try:
-            post_likes = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div'))).text
+            post_likes = wait.until(EC.visibility_of_element_located(
+                (By.CLASS_NAME, '_aacl _aaco _aacw _aacx _aada _aade'))).text
         except:
             print('Error! - post likes 1')
 
+        # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
-            post_likes = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div[2]/div/a/div/span'))).text
+            post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
             print('Error! - post likes 2')
 
         # Looking for 'likes' with the format of "others", for example "767 others" or anything with the word "others"
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
-                (By.CLASS_NAME, '_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll ')))[0].text
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div[2]/div/a/div/span'))).text
         except:
-            print('Error! - post likes 3')
+            print('Error! - post likes 2.1')
 
+        # Looking for 'likes' with the format of "likes", on videos posts
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '//div[@class="_7UhW9   xLCgt        qyrsm KV-D4               fDxYl    T0kll "')))
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
-            print('Error! - post likes 4')
+            print('Error! - post likes 2.2')
 
         # This XPATH is for 'views'
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/section[2]/div/span/div')))
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/span/div/span'))).text
         except:
-            print('Error! - post views 5')
+            print('Error! - post views 3')
         return post_likes
 
     # getting the content of the post
@@ -57,15 +66,10 @@ class Functions:
         post_text = ""
         try:
             post_text = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div/li/div/div/div[2]/div[1]/span'))).text
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div/li/div/div/div[2]/div[1]/span'))).text
         except:
-            print('Error! - post text 1')
+            print('Error! - post text')
 
-        try:
-            post_text = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/div[6]/div[3]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/ul[1]/div/li/div/div/div[2]/div[1]/span'))).text
-        except:
-            print('Error! - post text 2')
         return post_text
 
     def clean_post_text(self, post_text):
@@ -140,7 +144,7 @@ class Functions:
         followers_amount = None
         try:
             user_data = wait.until(EC.visibility_of_all_elements_located(
-                (By.CSS_SELECTOR, ".g47SY ")))
+                (By.CSS_SELECTOR, "._ac2a")))
             posts_amount = user_data[0].text
             followers_amount = user_data[1].text
             following_amount = user_data[2].text
@@ -155,7 +159,7 @@ class Functions:
         try:
             # getting the verified badge
             is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                                 '/html/body/div/section/main/div/header/section/div/div/span'))).text
+                                                                 '/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/div[1]/div[1]/span'))).text
             if is_verified:
                 is_verified = 1
         except:
@@ -175,7 +179,7 @@ class Functions:
                 if word[0] == '#':
                     # adding the word to the list
                     #hashtags_list.append(word[1:])
-                    hashtags_string += word + " "
+                    hashtags_string += word[1:] + " "
             return hashtags_string
         else:
             return " "
@@ -284,3 +288,12 @@ class Functions:
                 return tags_string
         else:
             return None
+
+    # Write to csv
+    def write_to_csv(self, post_obj, headers):
+        df = pd.DataFrame([post_obj])
+        # If file is not exists, then create it and write the headers for the columns
+        if not os.path.isfile('eran_data.csv'):
+            df.to_csv('eran_data.csv', header=headers, index=False)
+        else:  # else it exists so append without writing the header
+            df.to_csv('eran_data.csv', mode='a', header=False, index=False)

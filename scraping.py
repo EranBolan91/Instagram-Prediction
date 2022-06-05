@@ -10,9 +10,7 @@ from functions import Functions
 from selenium import webdriver
 from dotenv import load_dotenv
 from datetime import datetime
-import pandas as pd
 import time
-import csv
 import os
 load_dotenv()
 
@@ -53,130 +51,120 @@ if __name__ == "__main__":
 
     # Click on the first post on the 'Explore' window
     first_post = wait.until(
-        EC.element_to_be_clickable((By.CLASS_NAME, '_9AhH0')))
+        EC.element_to_be_clickable((By.CLASS_NAME, '_aagw')))
     first_post.click()
 
     # Open csv file
-    # file = open('eran_data.csv', 'a+', newline="")
-    header = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid', 'hashtag', 'hashtag_amount','pCo', 'content', 'post_date', 'curr_date','predict']
-    # writer = csv.writer(file, delimiter='\t')
-    # writer.writerow(header)
+    headers = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid', 'hashtag', 'hashtag_amount','pCo', 'content', 'post_date', 'curr_date','predict']
     post_num = 1
-    # Open csv file
-    with open('eran_data.csv', 'a+', newline='', encoding='utf-8') as file:
-        csv_writer = csv.DictWriter(file, delimiter='\t', lineterminator='\n', fieldnames=header)
-        csv_writer.writeheader()
-        post_obj = {'id': [], 'likes': [], 'following': [], 'followers': [], 'posts_amount': [], 'celeb': [],
-                    'pic_vid': [], 'hashtag': [], 'hashtag_amount': [], 'pCo': [], 'content': [], 'post_date': [],
-                    'curr_date': [], 'predict': []}
-        while 1:
-            print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
-            # Get the username
-            username = Functions().get_username(wait)
-            print("Username: " + str(username))
+    post_obj = {'id': "", 'likes': "", 'following': "", 'followers': "", 'posts_amount': "", 'celeb': "",
+                'pic_vid': "", 'hashtag': "", 'hashtag_amount': "", 'pCo': "", 'content': "", 'post_date': "",
+                'curr_date': "", 'predict': ""}
+    while 1:
+        print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
+        # Get the username
+        username = Functions().get_username(wait)
+        print("Username: " + str(username))
 
-            # Get post id
-            post_id = Functions().get_post_id(driver)
-            post_obj['id'].append(post_id)
-            print("Post id: " + str(post_id))
+        # Get post id
+        post_id = Functions().get_post_id(driver)
+        post_obj['id'] = post_id
+        print("Post id: " + str(post_id))
 
-            # Get post likes
-            post_likes = Functions().get_post_likes(wait)
-            # This func remove 'likes' String
-            postLikesNum = Functions().get_number_post_likes(post_likes)
-            clean_post_likes = Functions().clean_number(postLikesNum)
-            post_obj['likes'].append(clean_post_likes)
-            print("Post Likes: " + str(clean_post_likes))
+        # Get post likes
+        post_likes = Functions().get_post_likes(wait)
+        # This func remove 'likes' String
+        postLikesNum = Functions().get_number_post_likes(post_likes)
+        clean_post_likes = Functions().clean_number(postLikesNum)
+        post_obj['likes'] = clean_post_likes
+        print("Post Likes: " + str(clean_post_likes))
 
-            # Get post text - If there is no text in the post, func will return empty string
-            post_text = Functions().get_post_text(wait)
-            # Cleaning post text from all hashtags label and special characters
-            clean_post = Functions().clean_post_text(post_text)
-            post_obj['content'].append(clean_post)
-            print("Post Text: " + str(clean_post))
+        # Get post text - If there is no text in the post, func will return empty string
+        post_text = Functions().get_post_text(wait)
+        # Cleaning post text from all hashtags label and special characters
+        clean_post = Functions().clean_post_text(post_text)
+        post_obj['content'] = clean_post
+        print("Post Text: " + str(clean_post))
 
-            # Count how many hashtags exists - Func return a number.
-            # IF there are no hashtags it will return 0
-            hashtag_amount = Functions().count_hashtags(post_text)
-            post_obj['hashtag_amount'].append(hashtag_amount)
-            print("Hashtags amount: " + str(hashtag_amount))
+        # Count how many hashtags exists - Func return a number.
+        # IF there are no hashtags it will return 0
+        hashtag_amount = Functions().count_hashtags(post_text)
+        print("Hashtags amount: " + str(hashtag_amount))
+        post_obj['hashtag_amount'] = hashtag_amount
 
-            # get post hashtags
-            hashtags = Functions().post_hashtags(post_text)
-            #print("\nThe hashtags in \"" + post_text + "\" are :")
-            print("Hashtags string: " + str(hashtags))
-            post_obj['hashtag'].append(hashtags)
+        # get post hashtags
+        hashtags = Functions().post_hashtags(post_text)
+        print("Hashtags string: " + str(hashtags))
+        post_obj['hashtag'] = hashtags
 
-            # Checking if the post is video. Video - 1 , Picture - 0
-            is_video = Functions().check_if_video(wait)
-            if is_video:
-                post_obj['pic_vid'].append(1)
-            else:
-                post_obj['pic_vid'].append(0)
-            print("Is Video: " + str(is_video))
+        # Checking if the post is video. Video - 1 , Picture - 0
+        is_video = Functions().check_if_video(wait)
+        if is_video:
+            post_obj['pic_vid'] = 1
+        else:
+            post_obj['pic_vid'] = 0
+        print("Is Video: " + str(is_video))
 
-            # Open new tab to current post
-            Functions().nav_post_new_tab(driver, post_id, base_url)
+        # Open new tab to current post
+        Functions().nav_post_new_tab(driver, post_id, base_url)
 
-            # Get image URL
-            img = Functions().get_img_url(wait)
-            print("Image URL: " + str(img))
+        # Get image URL
+        img = Functions().get_img_url(wait)
+        print("Image URL: " + str(img))
 
-            # This func return a one string of tags, separate by space.
-            # If the picture has no tags, it will return None or if image link is not found
-            pCo = Functions().get_tags_from_image(cv_client, img)
-            post_obj['pCo'].append(pCo)
-            print("pCo: " + str(pCo))
+        # This func return a one string of tags, separate by space.
+        # If the picture has no tags, it will return None or if image link is not found
+        pCo = Functions().get_tags_from_image(cv_client, img)
+        post_obj['pCo'] = pCo
+        print("pCo: " + str(pCo))
 
-            Functions().close_new_tab(driver)
+        Functions().close_new_tab(driver)
 
-            # Get post date
-            post_date = Functions().get_time(wait)
-            print("Post Date: " + str(post_date))
-            post_obj['post_date'].append(post_date)
+        # Get post date
+        post_date = Functions().get_time(wait)
+        print("Post Date: " + str(post_date))
+        post_obj['post_date'] = post_date
 
-            # Open new tab and nav to the username
-            Functions().nav_user_new_tab(driver, username, base_url)
+        # Open new tab and nav to the username
+        Functions().nav_user_new_tab(driver, username, base_url)
+        #
+        # # Get user data
+        posts, following, followers = Functions().get_posts_following_followers_amount(wait)
+        clean_posts = Functions().clean_number(posts)
+        clean_followers = Functions().clean_number(followers)
+        clean_following = Functions().clean_number(following)
+        print("Posts: " + str(clean_posts))
+        print("followers_amount: " + str(clean_followers))
+        print("following_amount: " + str(clean_following))
+        post_obj['posts_amount'] = clean_posts
+        post_obj['followers'] = clean_followers
+        post_obj['following'] = clean_following
 
-            # Get user data
-            posts, following, followers = Functions().get_posts_following_followers_amount(wait)
-            clean_posts = Functions().clean_number(posts)
-            clean_followers = Functions().clean_number(followers)
-            clean_following = Functions().clean_number(following)
-            print("Posts: " + str(clean_posts))
-            print("followers_amount: " + str(clean_followers))
-            print("following_amount: " + str(clean_following))
-            post_obj['posts_amount'].append(clean_posts)
-            post_obj['followers'].append(clean_followers)
-            post_obj['following'].append(clean_following)
+        # get True for Verified badge or 0 for none
+        is_verified = Functions().verified_badge(wait)
+        print("Is Verified: " + str(is_verified))
+        post_obj['celeb'] = is_verified
 
-            # get True for Verified badge or 0 for none
-            # @@@@@ Need to check this function @@@@@
-            is_verified = Functions().verified_badge(wait)
-            print("Is Verified: " + str(is_verified))
-            post_obj['celeb'].append(is_verified)
+        # Close the tab and nav back
+        Functions().close_new_tab(driver)
 
-            # Close the tab and nav back
-            Functions().close_new_tab(driver)
+        # Get current date
+        curr_date = datetime.today().strftime('%d-%m-%Y')
+        post_obj['curr_date'] = curr_date
+        print("Current Date: " + str(curr_date))
 
-            # Get current date
-            curr_date = datetime.today().strftime('%d-%m-%Y')
-            post_obj['curr_date'].append(curr_date)
-            print("Current Date: " + str(curr_date))
+        # Func that gets the post likes and followers and calc if the post has more then 30%
+        # IF `posts_likes` or `clean_followers` is None, then func will return None
+        prediction = Functions().calc_prediction(clean_post_likes, clean_followers)
+        print("Prediction: " + str(prediction))
+        post_obj['predict'] = prediction
 
-            # Func that gets the post likes and followers and calc if the post has more then 30%
-            # IF `posts_likes` or `clean_followers` is None, then func will return None
-            prediction = Functions().calc_prediction(clean_post_likes, clean_followers)
-            print("Prediction: " + str(prediction))
-            post_obj['predict'].append(prediction)
+        # Write to CSV
+        print(post_obj)
+        Functions().write_to_csv(post_obj, headers)
 
-            # # Write to CSV
-            # print(row)
-            # csv_writer.writerow(post_obj)
-            # row.clear()
-
-            # Click on the next post (Arrow right)
-            wait.until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-            time.sleep(3)
-            post_num += 1
+        # Click on the next post (Arrow right)
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+        time.sleep(3)
+        post_num += 1
