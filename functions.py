@@ -5,6 +5,7 @@ import csv
 import re
 import os
 
+
 class Functions:
 
     # getting the username of the post
@@ -35,7 +36,8 @@ class Functions:
 
         # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
-            post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
+            post_likes = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
             print('Error! - post likes 2')
 
@@ -75,7 +77,7 @@ class Functions:
     def clean_post_text(self, post_text):
         if post_text:
             hashtag_pattern = "#\w+"  # pattern for hashtags
-            label_tiugim = "@\w+" # pattern for labels (Tiyugim)
+            label_tiugim = "@\w+"  # pattern for labels (Tiyugim)
 
             # Getting all hashtags from text
             hashtags_list = re.findall(hashtag_pattern, post_text)
@@ -170,7 +172,6 @@ class Functions:
     # If 'post_text' is empty string, then it will return empty string (it happenes when post does not have any hashtags)
     def post_hashtags(self, post_text):
         # initial list variable
-        hashtags_list = []
         hashtags_string = ""
         if post_text:
             # splitting the text into words
@@ -178,7 +179,6 @@ class Functions:
                 # checking the first character of every word
                 if word[0] == '#':
                     # adding the word to the list
-                    #hashtags_list.append(word[1:])
                     hashtags_string += word[1:] + " "
             return hashtags_string
         else:
@@ -293,7 +293,7 @@ class Functions:
     def write_to_csv(self, post_obj, headers):
         df = pd.DataFrame([post_obj])
         # If file is not exists, then create it and write the headers for the columns
-        if not os.path.isfile('eran_data.csv'):
-            df.to_csv('eran_data.csv', header=headers, index=False)
+        if not os.path.isfile('oren_data.csv'):
+            df.to_csv('oren_data.csv', header=headers, index=False)
         else:  # else it exists so append without writing the header
-            df.to_csv('eran_data.csv', mode='a', header=False, index=False)
+            df.to_csv('oren_data.csv', mode='a', header=False, index=False)

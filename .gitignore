@@ -3,6 +3,5 @@ geckodriver.exe
 geckodriver.log
 chromedriver.exe
 eran_data.csv
-eran_data1.csv
-eran_data2.csv
+oren_data.csv
 csv_files.py

@@ -24,12 +24,27 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     hashtag_url = "https://www.instagram.com/explore/tags/"
-    hashtag_list = ['sport', 'tlv', 'food', 'gym', 'train', 'money', 'dog', 'nature', 'cars', 'pool', 'swim', 'cat',
-                    'baby', 'running', 'tree', 'sea', 'nails', 'bikini', 'woman', 'man', 'fitguys', 'swimwear',
-                    'fitness', 'model', 'view', 'beach', 'football', 'happy', 'kids', 'sweet', 'party', 'alcohol',
-                    'fitnessmodel', 'motivation', 'sunday', 'style', 'fashion', 'power']
+    # hashtag_list = ['sport', 'tlv', 'food', 'gym', 'train', 'money', 'dog', 'nature', 'cars', 'pool', 'swim', 'cat',
+    #                 'baby', 'running', 'tree', 'sea', 'nails', 'bikini', 'woman', 'man', 'fitguys', 'swimwear',
+    #                 'fitness', 'model', 'view', 'beach', 'football', 'happy', 'kids', 'sweet', 'party', 'alcohol',
+    #                 'fitnessmodel', 'motivation', 'sunday', 'style', 'fashion', 'power']
+    # hashtag_list = ['love', 'instagood', 'fashion', 'photooftheday', 'beautiful', 'art', 'photography', 'instalike', 'picoftheday', 'cute', 'follow', 'tbt',
+    #                 'followme', 'like4like', 'travel', 'instagram', 'repost', 'summer', 'instadaily', 'selfie', 'me', 'friends',
+    #                 'girl', 'food', 'fun', 'beach', 'beauty', 'sad', 'smile', 'laugh', 'family', 'life', 'israel', 'usa',
+    #                 'music', 'ootd', 'nofilter', 'saturday', 'foodporn', 'musk', 'investing', 'marvel', 'science', 'space', 'rockets']
+    # hashtag_list = ['eyes', 'spain', 'ice','hits', 'holiday', 'nofilterneeded', 'deserts', 'yummi', 'numbers', 'budha', 'war', 'weapon', 'economics', 'games', 'hitech',
+    #                 'tech', 'technology', 'computers', 'phisics', 'beach', 'hope', 'wishes', 'samurai', 'culture', 'soul', 'jet',
+    #                 'fire', 'wind', 'earth', 'atom', 'spring', 'fall', 'sunrise', 'sunset', 'galaxy', 'coach', 'concert', 'marketing', 'research']
+    # hashtag_list = ['apple', 'android', 'moon', 'flowers', 'stars', 'titanic', 'relax', 'therapy', 'memory', 'fish', 'extreme', 'dj', 'water', 'mentor', 'entertainment',
+    #                 'news', 'politics', 'sports', 'multiplayer', 'lol', 'danger', 'fake', 'software', 'system', 'soccer', 'model', 'mask', 'random',
+    #                 'statistics', 'probablity', 'cards', 'poker', 'billiard', 'bowling', 'accessories', 'glass', 'tricks', 'tips', 'trump', 'engine',
+    #                 'wedding', 'heart', 'guitar','high', 'show', 'code', 'baby', 'infant', 'cute', 'oxygen', 'furniture', 'kitchen', 'garden', 'house',
+    #                 'lights', 'books', 'psy', 'dance']
+    hashtag_list = ['forum', 'sexy', 'electricity', 'shoes',
+                    'current', 'flow', 'invest', 'energy', 'inner', 'renewable']
+    # hashtag_list = []
     cv_client = ComputerVisionClient(
-    ENDPOINT, CognitiveServicesCredentials(API_KEY))
+        ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -53,7 +68,8 @@ if __name__ == "__main__":
     time.sleep(5)
 
     # Open csv file
-    headers = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid', 'hashtag', 'hashtag_amount','pCo', 'content', 'post_date', 'curr_date','predict']
+    headers = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid',
+               'hashtag', 'hashtag_amount', 'pCo', 'content', 'post_date', 'curr_date', 'predict']
     post_num = 1
     post_obj = {'id': "", 'likes': "", 'following': "", 'followers': "", 'posts_amount': "", 'celeb': "",
                 'pic_vid': "", 'hashtag': "", 'hashtag_amount': "", 'pCo': "", 'content': "", 'post_date': "",
