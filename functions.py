@@ -7,7 +7,6 @@ import os
 
 
 class Functions:
-
     # getting the username of the post
     def get_username(self, wait):
         username = None
@@ -27,13 +26,6 @@ class Functions:
     # getting the post likes
     def get_post_likes(self, wait):
         post_likes = None
-
-        try:
-            post_likes = wait.until(EC.visibility_of_element_located(
-                (By.CLASS_NAME, '_aacl _aaco _aacw _aacx _aada _aade'))).text
-        except:
-            print('Error! - post likes 1')
-
         # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
@@ -107,7 +99,8 @@ class Functions:
             img_url = wait.until(EC.visibility_of_element_located(
                 (By.TAG_NAME, "img"))).get_attribute("src")
         except:
-            print('Error! - No Image')
+            pass
+            # print('Error! - No Image')
         return img_url
 
     # checking if the post is a picture or video
@@ -119,7 +112,8 @@ class Functions:
             is_video = wait.until(EC.element_to_be_clickable(
                 (By.TAG_NAME, 'video'))).is_displayed()
         except:
-            print('Error! - is video ')
+            pass
+            # print('Error! - is video ')
         return is_video
 
     # going to the user profile tab to get more information
@@ -282,7 +276,6 @@ class Functions:
                 return None
             else:
                 for tag in res.tags:
-                    #print("'{}' with confidence {:.2f}%".format(tag.name, tag.confidence * 100))
                     if tag.confidence * 100 > 90:
                         tags_string += tag.name + " "
                 return tags_string
