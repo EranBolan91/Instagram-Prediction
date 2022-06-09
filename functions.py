@@ -5,8 +5,8 @@ import csv
 import re
 import os
 
-class Functions:
 
+class Functions:
     # getting the username of the post
     def get_username(self, wait):
         username = None
@@ -26,13 +26,6 @@ class Functions:
     # getting the post likes
     def get_post_likes(self, wait):
         post_likes = None
-
-        try:
-            post_likes = wait.until(EC.visibility_of_element_located(
-                (By.CLASS_NAME, '_aacl _aaco _aacw _aacx _aada _aade'))).text
-        except:
-            print('Error! - post likes 1')
-
         # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
             post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
@@ -105,7 +98,8 @@ class Functions:
             img_url = wait.until(EC.visibility_of_element_located(
                 (By.TAG_NAME, "img"))).get_attribute("src")
         except:
-            print('Error! - No Image')
+            pass
+            # print('Error! - No Image')
         return img_url
 
     # checking if the post is a picture or video
@@ -117,7 +111,8 @@ class Functions:
             is_video = wait.until(EC.element_to_be_clickable(
                 (By.TAG_NAME, 'video'))).is_displayed()
         except:
-            print('Error! - is video ')
+            pass
+            # print('Error! - is video ')
         return is_video
 
     # going to the user profile tab to get more information
@@ -170,7 +165,6 @@ class Functions:
     # If 'post_text' is empty string, then it will return empty string (it happenes when post does not have any hashtags)
     def post_hashtags(self, post_text):
         # initial list variable
-        hashtags_list = []
         hashtags_string = ""
         if post_text:
             # splitting the text into words
@@ -178,7 +172,6 @@ class Functions:
                 # checking the first character of every word
                 if word[0] == '#':
                     # adding the word to the list
-                    #hashtags_list.append(word[1:])
                     hashtags_string += word[1:] + " "
             return hashtags_string
         else:
@@ -282,7 +275,6 @@ class Functions:
                 return None
             else:
                 for tag in res.tags:
-                    #print("'{}' with confidence {:.2f}%".format(tag.name, tag.confidence * 100))
                     if tag.confidence * 100 > 90:
                         tags_string += tag.name + " "
                 return tags_string

@@ -24,10 +24,33 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     hashtag_url = "https://www.instagram.com/explore/tags/"
-    hashtag_list = ['sport', 'tlv', 'food', 'gym', 'train', 'money', 'dog', 'nature', 'cars', 'pool', 'swim', 'cat',
-                    'baby', 'running', 'tree', 'sea', 'nails', 'bikini', 'woman', 'man', 'fitguys', 'swimwear',
-                    'fitness', 'model', 'view', 'beach', 'football', 'happy', 'kids', 'sweet', 'party', 'alcohol',
-                    'fitnessmodel', 'motivation', 'sunday', 'style', 'fashion', 'power']
+    # hashtag_list = ['sport', 'tlv', 'food', 'gym', 'train', 'money', 'dog', 'nature', 'cars', 'pool', 'swim', 'cat',
+    #                 'baby', 'running', 'tree', 'sea', 'nails', 'bikini', 'woman', 'man', 'fitguys', 'swimwear',
+    #                 'fitness', 'model', 'view', 'beach', 'football', 'happy', 'kids', 'sweet', 'party', 'alcohol',
+    #                 'fitnessmodel', 'motivation', 'sunday', 'style', 'fashion', 'power']
+    # hashtag_list = ['cake', 'wedding', 'night', 'nightlife', 'smile', 'like4like', 'likeforlike', 'fire', 'beautiful',
+    #                 'funny', 'swim', 'cat', 'baby', 'plain', 'vacation', 'rapper', 'hightech', 'code', 'art',
+    #                 'hamburger', 'gun', 'family', 'club', 'enjoy', 'foodporn', 'drink', 'coffee', 'hotel', 'workout',
+    #                 'tall', 'partyrock', 'celeb', 'sexy', 'lunch', 'friends', 'forever', 'ring', 'house', 'icecream',
+    #                 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset', 'makeup',
+    #                 'beauty', 'school', 'army', 'relax', 'technology', 'future']
+    # hashtag_list = ['family', 'club', 'enjoy', 'foodporn', 'drink', 'coffee', 'hotel', 'workout',
+    #                 'tall', 'partyrock', 'celeb', 'sexy', 'lunch', 'friends', 'forever', 'ring', 'house', 'icecream',
+    #                 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset', 'makeup',
+    #                 'beauty', 'school', 'army', 'relax', 'technology', 'future']
+    # hashtag_list = ['icecream', 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset',
+    #                 'makeup', 'beauty', 'school', 'army', 'relax', 'technology', 'future']
+    # hashtag_list = ['love', 'fashion', 'art', 'picoftheday', 'happy', 'follow', 'travel', 'style', 'motivation'
+    #                 'tbt', 'instadaily', 'like4like', 'repost', 'me', 'selfie', 'instalike', 'friends', 'photo',
+    #                 'family', 'life', 'music', 'likeforlike', 'amazing', 'lifestyle', 'design', 'nofilter', 'instamood',
+    #                 'explore', 'artist']
+    # hashtag_list = ['funny', 'tagsforlikes', 'pretty', 'girls', 'instapic',
+    #                 'healthy', 'swag', 'cool', 'instafashion', 'sea', 'happiness', 'holiday', 'black', 'smile',
+    #                 'flowers', 'pretty', 'inspiration', 'lol', 'swag', 'yummy', 'moda', 'FollowMe', 'PhotoOfTheDay',
+    #                 'gymlife', 'exercise', 'goals', 'reels', 'dj', 'foodie', 'tasty']
+    hashtag_list = ['yummy', 'moda', 'FollowMe', 'PhotoOfTheDay', 'gymlife', 'exercise', 'goals', 'reels', 'dj',
+                    'foodie', 'tasty', 'restaurant', 'foodgasm', 'foodies', 'winter', 'summer', 'festival', 'cute',
+                    'followme', 'vscocam', 'hot', 'road', 'drive', 'american', 'crazy', 'trip', 'freedom', 'free']
     cv_client = ComputerVisionClient(
     ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
@@ -40,6 +63,7 @@ if __name__ == "__main__":
     options.add_argument("--disable-notifications")
 
     chrome_options = webdriver.ChromeOptions()
+    #chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(
         'chromedriver.exe', options=options, chrome_options=chrome_options)
     wait = WebDriverWait(driver, 7)
@@ -62,7 +86,7 @@ if __name__ == "__main__":
     for hashtag in hashtag_list:
         # Nav to hashtag page
         driver.get(hashtag_url + '{}'.format(hashtag))
-
+        print("######## Hashtag: {} ########".format(hashtag))
         # Click on the first post on the 'Explore' window
         first_post = wait.until(
             EC.element_to_be_clickable((By.CLASS_NAME, '_aagw')))
@@ -175,7 +199,7 @@ if __name__ == "__main__":
                 # Click on the next post (Arrow right)
                 wait.until(EC.element_to_be_clickable(
                     (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-                time.sleep(20)
+                time.sleep(60)
                 post_num += 1
             except:
                 pass

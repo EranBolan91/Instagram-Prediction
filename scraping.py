@@ -127,7 +127,7 @@ if __name__ == "__main__":
 
         # Open new tab and nav to the username
         Functions().nav_user_new_tab(driver, username, base_url)
-        #
+
         # # Get user data
         posts, following, followers = Functions().get_posts_following_followers_amount(wait)
         clean_posts = Functions().clean_number(posts)
@@ -164,7 +164,23 @@ if __name__ == "__main__":
         Functions().write_to_csv(post_obj, headers)
 
         # Click on the next post (Arrow right)
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-        time.sleep(3)
+        try:
+            time.sleep(1)
+            wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+        except:
+            # close button
+            wait.until(EC.element_to_be_clickable((By.XPATH, "//*[name()='svg' and @aria-label='Close']"))).click()
+            time.sleep(6)
+            driver.execute_script("""window.scrollTo(0, document.body.scrollHeight)""")
+            x = wait.until(EC.visibility_of_any_elements_located((By.CLASS_NAME, '_aagw')))
+            x[int(len(x)/2)].click()
+            # Skip 11 posts to avoid duplicate posts
+            print("Start skip")
+            for i in range(11):
+                wait.until(EC.element_to_be_clickable(
+                    (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+                time.sleep(1)
+            print("Finished skip")
+        time.sleep(1)
         post_num += 1
