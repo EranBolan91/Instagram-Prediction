@@ -286,7 +286,7 @@ class Functions:
     def write_to_csv(self, post_obj, headers):
         df = pd.DataFrame([post_obj])
         # If file is not exists, then create it and write the headers for the columns
-        if not os.path.isfile('oren_data.csv'):
-            df.to_csv('oren_data.csv', header=headers, index=False)
+        if not os.path.isfile('oren_data2.csv'):
+            df.to_csv('oren_data2.csv', header=headers, index=False)
         else:  # else it exists so append without writing the header
-            df.to_csv('oren_data.csv', mode='a', header=False, index=False)
+            df.to_csv('oren_data2.csv', mode='a', header=False, index=False)
