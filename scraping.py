@@ -60,7 +60,8 @@ if __name__ == "__main__":
     post_obj = {'id': "", 'likes': "", 'following': "", 'followers': "", 'posts_amount': "", 'celeb': "",
                 'pic_vid': "", 'hashtag': "", 'hashtag_amount': "", 'pCo': "", 'content': "", 'post_date': "",
                 'curr_date': "", 'predict': ""}
-    while 1:
+    is_blocked = 1
+    while is_blocked:
         print("@@@@@@@@@@ Post number: {} @@@@@@@@@@@".format(str(post_num)))
         # Get the username
         username = Functions().get_username(wait)
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 
         # Open new tab to current post
         Functions().nav_post_new_tab(driver, post_id, base_url)
-
+        is_blocked = Functions().check_if_blocked(wait)
         # Get image URL
         img = Functions().get_img_url(wait)
         print("Image URL: " + str(img))
@@ -127,6 +128,7 @@ if __name__ == "__main__":
 
         # Open new tab and nav to the username
         Functions().nav_user_new_tab(driver, username, base_url)
+        is_blocked = Functions().check_if_blocked(wait)
 
         # # Get user data
         posts, following, followers = Functions().get_posts_following_followers_amount(wait)
@@ -173,14 +175,21 @@ if __name__ == "__main__":
             wait.until(EC.element_to_be_clickable((By.XPATH, "//*[name()='svg' and @aria-label='Close']"))).click()
             time.sleep(6)
             driver.execute_script("""window.scrollTo(0, document.body.scrollHeight)""")
-            x = wait.until(EC.visibility_of_any_elements_located((By.CLASS_NAME, '_aagw')))
-            x[int(len(x)/2)].click()
-            # Skip 11 posts to avoid duplicate posts
-            print("Start skip")
-            for i in range(11):
-                wait.until(EC.element_to_be_clickable(
-                    (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-                time.sleep(1)
-            print("Finished skip")
+            try:
+                x = wait.until(EC.visibility_of_any_elements_located((By.CLASS_NAME, '_aagw')))
+                x[int(len(x)/2)].click()
+                # Skip 11 posts to avoid duplicate posts
+                print("Start skip")
+                for i in range(11):
+                    wait.until(EC.element_to_be_clickable(
+                        (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
+                    time.sleep(1)
+                print("Finished skip")
+            except:
+                driver.refresh()
+                time.sleep(3)
+                first_post = wait.until(
+                    EC.element_to_be_clickable((By.CLASS_NAME, '_aagw')))
+                first_post.click()
         time.sleep(1)
         post_num += 1

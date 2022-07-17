@@ -24,33 +24,33 @@ ENDPOINT = os.getenv('COMPUTER_VISION_END_POINT')
 if __name__ == "__main__":
     base_url = "http://instagram.com"
     hashtag_url = "https://www.instagram.com/explore/tags/"
-    # hashtag_list = ['sport', 'tlv', 'food', 'gym', 'train', 'money', 'dog', 'nature', 'cars', 'pool', 'swim', 'cat',
-    #                 'baby', 'running', 'tree', 'sea', 'nails', 'bikini', 'woman', 'man', 'fitguys', 'swimwear',
-    #                 'fitness', 'model', 'view', 'beach', 'football', 'happy', 'kids', 'sweet', 'party', 'alcohol',
-    #                 'fitnessmodel', 'motivation', 'sunday', 'style', 'fashion', 'power']
-    # hashtag_list = ['cake', 'wedding', 'night', 'nightlife', 'smile', 'like4like', 'likeforlike', 'fire', 'beautiful',
-    #                 'funny', 'swim', 'cat', 'baby', 'plain', 'vacation', 'rapper', 'hightech', 'code', 'art',
-    #                 'hamburger', 'gun', 'family', 'club', 'enjoy', 'foodporn', 'drink', 'coffee', 'hotel', 'workout',
-    #                 'tall', 'partyrock', 'celeb', 'sexy', 'lunch', 'friends', 'forever', 'ring', 'house', 'icecream',
-    #                 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset', 'makeup',
-    #                 'beauty', 'school', 'army', 'relax', 'technology', 'future']
-    # hashtag_list = ['family', 'club', 'enjoy', 'foodporn', 'drink', 'coffee', 'hotel', 'workout',
-    #                 'tall', 'partyrock', 'celeb', 'sexy', 'lunch', 'friends', 'forever', 'ring', 'house', 'icecream',
-    #                 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset', 'makeup',
-    #                 'beauty', 'school', 'army', 'relax', 'technology', 'future']
-    # hashtag_list = ['icecream', 'basketball', 'movies', 'action', 'bananot', 'poolparty', 'sunglasses', 'sunset',
-    #                 'makeup', 'beauty', 'school', 'army', 'relax', 'technology', 'future']
-    # hashtag_list = ['love', 'fashion', 'art', 'picoftheday', 'happy', 'follow', 'travel', 'style', 'motivation'
-    #                 'tbt', 'instadaily', 'like4like', 'repost', 'me', 'selfie', 'instalike', 'friends', 'photo',
-    #                 'family', 'life', 'music', 'likeforlike', 'amazing', 'lifestyle', 'design', 'nofilter', 'instamood',
-    #                 'explore', 'artist']
-    # hashtag_list = ['funny', 'tagsforlikes', 'pretty', 'girls', 'instapic',
-    #                 'healthy', 'swag', 'cool', 'instafashion', 'sea', 'happiness', 'holiday', 'black', 'smile',
-    #                 'flowers', 'pretty', 'inspiration', 'lol', 'swag', 'yummy', 'moda', 'FollowMe', 'PhotoOfTheDay',
-    #                 'gymlife', 'exercise', 'goals', 'reels', 'dj', 'foodie', 'tasty']
-    hashtag_list = ['yummy', 'moda', 'FollowMe', 'PhotoOfTheDay', 'gymlife', 'exercise', 'goals', 'reels', 'dj',
-                    'foodie', 'tasty', 'restaurant', 'foodgasm', 'foodies', 'winter', 'summer', 'festival', 'cute',
-                    'followme', 'vscocam', 'hot', 'road', 'drive', 'american', 'crazy', 'trip', 'freedom', 'free']
+    hashtag_list = ['']
+    #'lifestyle', 'peace', 'god', 'saturday', 'cake', 'wedding', 'night', 'nightlife', 'smile',
+    #'likeforlike', 'fire', 'beautiful', 'amazing', 'wow', 'club', 'nightclub', 'crazy', 'pure'
+    #'funny', 'swim', 'cat', 'baby', 'plain', 'vacation', 'rapper', 'hightech', 'code', 'art',
+    #'hamburger', 'gun', 'family', 'club', 'enjoy', 'foodporn', 'drink', 'coffee', 'hotel', 'workout',
+    #'tall', 'partyrock', 'celeb', 'sexy', 'lunch', 'friends', 'forever', 'ring', 'house', 'icecream',
+    #'basketball', 'movies', 'action', 'poolparty', 'sunglasses', 'sunset', 'makeup', 'beauty',
+    #'school', 'army', 'relax', 'technology', 'future', 'curves', 'challenge', 'love', 'young',
+    #'goodvibes', 'instadaily', 'dress', 'explore', 'fitnessgirl', 'work', 'besties', 'speed',
+    #'energy', 'wild', 'nofilter', 'instamood', 'foodies', 'food', 'girls','boys', 'photo', 'video',
+    #'festival', 'happy', 'life', 'eat', 'cooking', 'cook', 'cool', 'perfect', 'instafun', 'curve',
+    #'red', 'power', 'cute', 'hotgirl', 'swimsuit', 'tan', 'summertime', 'kiss', 'fake', 'beachday', 'dirtydog'
+    #'cleandog', 'happydog', 'instadog', 'myboy', 'cutedog', 'breakfast', 'pic',
+    #'street', 'streetfood', 'tasty', 'bikinimodel', 'beachwear', 'beach', 'death', 'mylove','abs',
+    #'tattoo', 'pool', 'pooltime', 'poolday', 'summervibes', 'sleep', 'dinner', 'classic', 'class',
+    #'shots', 'port', 'sail', 'body', 'tanned', 'likeforlike', 'like4like','world', 'bestfriend',
+    #'sky', 'star', 'time', 'filter', 'nofliter', 'poolday', 'like4like', 'artist', 'lol', 'goals',
+    #'freedom', 'outfit', 'trip', 'sunkiss', 'instapic', 'motivation', 'selfie',
+    #'me', 'free', 'winter', 'travel', 'music', 'instafashion', 'jump','teen', 'tbt', 'test', 'tagsforlikes',
+    #'bestoftheday', 'bigbro', 'fat', 'crossfit', 'scary', 'popular', 'outdoor', 'road', 'sweet', 'top',
+    #'heart', 'big', 'move', 'lastnight', 'dream','famous', 'babe', 'instafav', 'instago', 'slim',
+    #'bustyskinny', 'viral', 'rave', 'event', 'festivals', 'party', 'partylover', 'dontcare', 'classyman', 'styleman',
+    #'pictureoftheday','whiteparty', 'gf', 'paradise', 'shredded', 'wonder', 'summerday', 'face', 'weekend',
+    #'smiles', 'wifey', 'wife', 'birthday', 'design', 'shoes', 'dark', 'fantasy', 'huge', 'lips', 'match', 'tindergirls'
+    #'boyfriend', 'girlfriend', 'hot', 'instalife', 'pop', 'gang', 'crew', 'pose', 'need', 'break', 'fast', 'joy',
+    # 'loveeat', 'wind', 'moon', 'market', 'sweetsixteen', 'sweetsixteenparty', 'beachvibes', 'supermodel', 'super'
+
     cv_client = ComputerVisionClient(
     ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
@@ -199,7 +199,7 @@ if __name__ == "__main__":
                 # Click on the next post (Arrow right)
                 wait.until(EC.element_to_be_clickable(
                     (By.XPATH, '//*[name()="svg" and @aria-label="Next"]'))).click()
-                time.sleep(60)
+                time.sleep(30)
                 post_num += 1
             except:
                 pass

@@ -1,7 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import pandas as pd
-import csv
 import re
 import os
 
@@ -12,15 +11,20 @@ class Functions:
         username = None
         try:
             username = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div[1]/span/a'))).text
+                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div/div/span/a'))).text
         except:
-            print('Error - username! - 1')
+            print('Error - username - 1')
 
         try:
             username = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div/span/a'))).text
+                                                              '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div/div/span[1]/a'))).text
         except:
-            print('Error - username! - 2')
+            print('Error - username - 2')
+
+        try:
+            username = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[1]/div/div/div/div[1]/div[1]/section/main/div[1]/div[1]/article/div/div[2]/div/div[1]/div/header/div[2]/div[1]/div/div/span[1]/a'))).text
+        except:
+            print('Error - username - 3')
         return username
 
     # getting the post likes
@@ -30,28 +34,32 @@ class Functions:
         try:
             post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
-            print('Error! - post likes 2')
+            pass
+            #print('Error! - post likes 2')
 
         # Looking for 'likes' with the format of "others", for example "767 others" or anything with the word "others"
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div[2]/div/a/div/span'))).text
         except:
-            print('Error! - post likes 2.1')
+            pass
+            #print('Error! - post likes 2.1')
 
         # Looking for 'likes' with the format of "likes", on videos posts
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
-            print('Error! - post likes 2.2')
+            pass
+            #print('Error! - post likes 2.2')
 
         # This XPATH is for 'views'
         try:
             post_likes = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/span/div/span'))).text
         except:
-            print('Error! - post views 3')
+            pass
+            #print('Error! - post views 3')
         return post_likes
 
     # getting the content of the post
@@ -97,6 +105,11 @@ class Functions:
         try:
             img_url = wait.until(EC.visibility_of_element_located(
                 (By.TAG_NAME, "img"))).get_attribute("src")
+        except:
+            pass
+            # print('Error! - No Image')
+        try:
+            img_url = wait.until(EC.visibility_of_all_elements_located((By.TAG_NAME, "img"))).get_attribute("src")[0]
         except:
             pass
             # print('Error! - No Image')
@@ -153,8 +166,7 @@ class Functions:
         is_verified = 0
         try:
             # getting the verified badge
-            is_verified = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                                 '/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/div[1]/div[1]/span'))).text
+            is_verified = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[contains(@title, 'Verified')]")))
             if is_verified:
                 is_verified = 1
         except:
@@ -285,7 +297,26 @@ class Functions:
     def write_to_csv(self, post_obj, headers):
         df = pd.DataFrame([post_obj])
         # If file is not exists, then create it and write the headers for the columns
-        if not os.path.isfile('eran_data.csv'):
-            df.to_csv('eran_data.csv', header=headers, index=False)
+        if not os.path.isfile('data.csv'):
+            df.to_csv('data.csv', header=headers, index=False)
         else:  # else it exists so append without writing the header
-            df.to_csv('eran_data.csv', mode='a', header=False, index=False)
+            df.to_csv('data.csv', mode='a', header=False, index=False)
+
+    # 0 - Blocked
+    # 1 - Not blocked
+    def check_if_blocked(self, wait):
+        try:
+            error_text = wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Sorry, this page isn't available.')]")))
+            para_text = wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'The link you followed may be broken, or the page may have been removed. ')]")))
+            #error_text = self.driver.find_element_by_xpath('/html/body/div/div[1]/div/div/h2').text
+            #para_text = self.driver.find_element_by_xpath('/html/body/div/div[1]/div/div/p').text
+            if error_text == "Sorry, this page isn't available.":
+                return 0
+            if error_text and para_text:
+                print(error_text)
+                print(para_text)
+                return 0
+        except Exception as e:
+            return 1
