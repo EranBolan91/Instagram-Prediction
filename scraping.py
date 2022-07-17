@@ -25,7 +25,7 @@ if __name__ == "__main__":
     base_url = "http://instagram.com"
     explore_url = "https://www.instagram.com/explore/"
     cv_client = ComputerVisionClient(
-    ENDPOINT, CognitiveServicesCredentials(API_KEY))
+        ENDPOINT, CognitiveServicesCredentials(API_KEY))
 
     # Defining the webdriver
     options = Options()
@@ -34,6 +34,7 @@ if __name__ == "__main__":
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument("--disable-notifications")
+    # options.add_argument("--headless")
 
     chrome_options = webdriver.ChromeOptions()
     driver = webdriver.Chrome(
@@ -55,7 +56,8 @@ if __name__ == "__main__":
     first_post.click()
 
     # Open csv file
-    headers = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid', 'hashtag', 'hashtag_amount','pCo', 'content', 'post_date', 'curr_date','predict']
+    headers = ['id', 'likes', 'following', 'followers', 'posts_amount', 'celeb', 'pic_vid',
+               'hashtag', 'hashtag_amount', 'pCo', 'content', 'post_date', 'curr_date', 'predict']
     post_num = 1
     post_obj = {'id': "", 'likes': "", 'following': "", 'followers': "", 'posts_amount': "", 'celeb': "",
                 'pic_vid': "", 'hashtag': "", 'hashtag_amount': "", 'pCo': "", 'content': "", 'post_date': "",

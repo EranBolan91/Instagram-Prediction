@@ -32,7 +32,8 @@ class Functions:
         post_likes = None
         # Looking for 'likes' with the format of "likes", for example "767 likes" or anything with the word "likes"
         try:
-            post_likes = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
+            post_likes = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[2]/div/div/div/a/div/span'))).text
         except:
             pass
             #print('Error! - post likes 2')
@@ -76,7 +77,7 @@ class Functions:
     def clean_post_text(self, post_text):
         if post_text:
             hashtag_pattern = "#\w+"  # pattern for hashtags
-            label_tiugim = "@\w+" # pattern for labels (Tiyugim)
+            label_tiugim = "@\w+"  # pattern for labels (Tiyugim)
 
             # Getting all hashtags from text
             hashtags_list = re.findall(hashtag_pattern, post_text)
